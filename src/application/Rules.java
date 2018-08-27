@@ -3,14 +3,14 @@ package application;
 public class Rules {
 	
 	
-	private AutomataState actualState;
+	private String actualState;
 	private char input; 
-	private Pila pilaActual;
-	private AutomataState futureState;
-	private Pila pilaFutura;
+	private String pilaActual;
+	private String futureState;
+	private String pilaFutura;
 	
 	
-	public Rules (AutomataState actualState, char input, Pila pilaActual, AutomataState futureState, Pila pilaFutura)
+	public Rules (String actualState, char input, String pilaActual, String futureState, String pilaFutura)
 	{
 		this.actualState = actualState;
 		this.input = input;
@@ -19,11 +19,11 @@ public class Rules {
 		this.pilaFutura = pilaFutura;
 	}
 	
-	public AutomataState getActualState() 
+	public String getActualState() 
 	{
 		return actualState;
 	}
-	public void setActualState(AutomataState actualState) 
+	public void setActualState(String actualState) 
 	{
 		this.actualState = actualState;
 	}
@@ -35,27 +35,27 @@ public class Rules {
 	{
 		this.input = input;
 	}
-	public Pila getPilaActual() 
+	public String getPilaActual() 
 	{
 		return pilaActual;
 	}
-	public void setPilaActual(Pila pilaActual) 
+	public void setPilaActual(String pilaActual) 
 	{
 		this.pilaActual = pilaActual;
 	}
-	public AutomataState getFutureState() 
+	public String getFutureState() 
 	{
 		return futureState;
 	}
-	public void setFutureState(AutomataState futureState) 
+	public void setFutureState(String futureState) 
 	{
 		this.futureState = futureState;
 	}
-	public Pila getPilaFutura() 
+	public String getPilaFutura() 
 	{
 		return pilaFutura;
 	}
-	public void setPilaFutura(Pila pilaFutura) 
+	public void setPilaFutura(String pilaFutura) 
 	{
 		this.pilaFutura = pilaFutura;
 	}
