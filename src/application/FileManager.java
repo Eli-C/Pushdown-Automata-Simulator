@@ -1,32 +1,43 @@
 package application;
 
+import com.google.gson.Gson;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+
 public class FileManager {
 	
-	private String path;
 	private String fileName;
-	private int operation;
-	private boolean current;
+        private Automata currentAutomata;
+        private Gson jsonParser;
 	
 	
-	public FileManager(String path, String fileName, int operation, boolean current)
+	public FileManager(String fileName, Automata current)
 	{
-		this.path = path;
 		this.fileName = fileName;
-		this.operation = operation;
-		this.current = current;
+                this.currentAutomata = current;
+                jsonParser = new Gson();
 	}
+        
+        public void saveAutomata() {
+            try {
+              this.jsonParser.toJson(this.currentAutomata,new FileWriter("../data/" + this.fileName + ".json"));   
+            } catch(IOException e) {
+                System.err.println("Error" + e.getMessage());
+            }
+        }
+        
+        public Automata getAutomata() {
+            try {
+               Automata m = this.jsonParser.fromJson(new FileReader("../data/" + this.fileName + ".json"), Automata.class);
+               return m;
+            } catch(IOException e) {
+                System.err.println("Error" + e.getMessage());
+                return null;
+            }
+            
+        }
 	
-
-	public String getPath() 
-	{
-		return path;
-	}
-
-	public void setPath(String path) 
-	{
-		this.path = path;
-	}
-
 	public String getFileName() 
 	{
 		return fileName;
@@ -37,24 +48,14 @@ public class FileManager {
 		this.fileName = fileName;
 	}
 
-	public int getOperation() 
+	public Automata getCurrentAutomata() 
 	{
-		return operation;
+            return currentAutomata;
 	}
 
-	public void setOperation(int operation) 
+	public void setCurrentAutomata(Automata current) 
 	{
-		this.operation = operation;
-	}
-
-	public boolean isCurrent() 
-	{
-		return current;
-	}
-
-	public void setCurrent(boolean current) 
-	{
-		this.current = current;
+		this.currentAutomata = current;
 	}
 
 }
