@@ -2,10 +2,11 @@ package application;
 
 import java.util.ArrayList;
 import java.util.Stack;
+import java.util.stream.Stream;
 
 public class Simulate {
 
-	private String word;
+	private String input;
 	private String initialState;
 	public Stack<String> stack;
 	private String result;
@@ -15,10 +16,8 @@ public class Simulate {
 	}
 	
 	public String testWord(String input, String initialState) {
-		this.word = input;
+		this.input = input;
 		this.initialState = initialState;
-		Automata automata = new Automata();
-		ArrayList<Rules> rules = automata.getRules();
 		Stack<String> stackcopy = stack;
 		
 		for (int i=0; i<input.length(); i++) {
@@ -27,6 +26,14 @@ public class Simulate {
 		}
 		
 		return result;
+	}
+	
+	public int findBestRule(char word, String state) {
+		Automata automata = new Automata();
+		ArrayList<Rules> rules = automata.getRules();
+		Stream<Rules> possibleRules = rules.stream().filter(rule -> ((rule.getInput() == word) && (rule.getActualState() == state)));
+		
+		return 0;
 	}
 	
 }
