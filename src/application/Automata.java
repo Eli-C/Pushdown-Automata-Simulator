@@ -2,14 +2,14 @@ package application;
 
 public class Automata {
 	
-	private AutomataState[] Q;
+	private String[] Q;
 	private char[] X;
 	private char[] P;
-	private AutomataState q0;
+	private String q0;
 	private String Z0;
-	private AutomataState[] F;
+	private String[] F;
 	
-	public Automata(AutomataState[] Q, char[] X, char[] P, AutomataState q0, String Z0, AutomataState[] F)
+	public Automata(String[] Q, char[] X, char[] P, String q0, String Z0, String[] F)
 	{
 		this.Q = Q;
 		this.X = X;
@@ -19,11 +19,11 @@ public class Automata {
 		this.F = F;		
 	}
 	
-	public AutomataState[] getQ() 
+	public String[] getQ() 
 	{
 		return Q;
 	}
-	public void setQ(AutomataState[] q) 
+	public void setQ(String[] q) 
 	{
 		Q = q;
 	}
@@ -43,11 +43,11 @@ public class Automata {
 	{
 		P = p;
 	}
-	public AutomataState getQ0() 
+	public String getQ0() 
 	{
 		return q0;
 	}
-	public void setQ0(AutomataState q0) 
+	public void setQ0(String q0) 
 	{
 		this.q0 = q0;
 	}
@@ -59,11 +59,11 @@ public class Automata {
 	{
 		Z0 = z0;
 	}
-	public AutomataState[] getF() 
+	public String[] getF() 
 	{
 		return F;
 	}
-	public void setF(AutomataState[] f) 
+	public void setF(String[] f) 
 	{
 		F = f;
 	}

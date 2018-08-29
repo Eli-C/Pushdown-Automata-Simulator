@@ -1,61 +1,39 @@
 package application;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-
+import java.io.Writer;
 public class FileManager {
-	
-	private String fileName;
-        private Automata currentAutomata;
+    
         private Gson jsonParser;
-	
-	
-	public FileManager(String fileName, Automata current)
+		
+	public FileManager()
 	{
-		this.fileName = fileName;
-                this.currentAutomata = current;
-                jsonParser = new Gson();
+                this.jsonParser = new GsonBuilder().setPrettyPrinting().create();
+                this.createBaseDirectory();
 	}
         
-        public void saveAutomata() {
-            try {
-              this.jsonParser.toJson(this.currentAutomata,new FileWriter("../data/" + this.fileName + ".json"));   
-            } catch(IOException e) {
-                System.err.println("Error" + e.getMessage());
-            }
+        public void saveAutomata(String fileName, Automata automata) throws IOException {
+            Writer writer = new FileWriter("savedData/" + fileName + ".json");
+            System.out.print("Trying to save the automata");
+            this.jsonParser.toJson(automata,writer);   
+            writer.close();
+            System.out.print("Finished");
         }
         
-        public Automata getAutomata() {
-            try {
-               Automata m = this.jsonParser.fromJson(new FileReader("../data/" + this.fileName + ".json"), Automata.class);
-               return m;
-            } catch(IOException e) {
-                System.err.println("Error" + e.getMessage());
-                return null;
-            }
-            
+        public Automata getAutomata(String fileName) throws FileNotFoundException {
+            System.out.print("Trying to get back the automata");
+            FileReader reader = new FileReader("savedData/" + fileName + ".json");
+            Automata m = this.jsonParser.fromJson(reader, Automata.class);
+            return m;
         }
-	
-	public String getFileName() 
-	{
-		return fileName;
-	}
-
-	public void setFileName(String fileName) 
-	{
-		this.fileName = fileName;
-	}
-
-	public Automata getCurrentAutomata() 
-	{
-            return currentAutomata;
-	}
-
-	public void setCurrentAutomata(Automata current) 
-	{
-		this.currentAutomata = current;
-	}
-
+        
+        private void createBaseDirectory() {
+            new File("savedData").mkdir();
+        }
 }
