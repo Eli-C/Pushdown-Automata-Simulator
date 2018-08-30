@@ -29,10 +29,6 @@ public class Automata {
 		this.rulesArray = rules;
 	}
 	
-	public Automata() {
-		
-	}
-	
 	public void setRules(Rules rule) {
 		rulesArray.add(rule);
 	}
