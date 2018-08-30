@@ -2,8 +2,6 @@ package application;
 
 import java.util.ArrayList;
 
-import com.sun.corba.se.impl.protocol.giopmsgheaders.Message;
-import com.sun.xml.internal.bind.v2.schemagen.xmlschema.List;
 
 //import java.awt.Button;
 
@@ -106,27 +104,27 @@ public class sceneAutomataController {
 
 	    }
 
-	    /* 
+	     
 	    @FXML
 	    public void read_Q()
 	    {
 	    	Alert errorAlert = new Alert(AlertType.ERROR);
 	    		    	
 	    	System.out.println(inputConjuntoEstados.getText());
-	    	if (inputConjuntoEstados.getText() != "") 
+	    	if (inputConjuntoEstados.getText().isEmpty()) 
 	    	{
-	    		Q.add(inputConjuntoEstados.getText());
-			}
+                    errorAlert.setHeaderText("Input not valid");
+                    errorAlert.setContentText("This text area must contains the appropiate words.");
+                    errorAlert.showAndWait();		
+                }
 	    	else 
 	    	{
-	    		errorAlert.setHeaderText("Input not valid");
-		    	errorAlert.setContentText("This text area must contains the appropiate words.");
-		    	errorAlert.showAndWait();		
-			}
+                    Q.add(inputConjuntoEstados.getText());
+            	}
 	    	//automata.setQ(Q);
 	    }
 	    
-	    */
+	    
 
 
 }

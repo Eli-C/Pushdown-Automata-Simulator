@@ -27,7 +27,7 @@ public class Automata {
 		this.q0 = q0; 
 		this.Z0 = Z0;
 		this.F = F;	
-    this.rulesArray = rules;
+                this.rulesArray = rules;
 	}
         
 	public void setRules(Rules rule) {

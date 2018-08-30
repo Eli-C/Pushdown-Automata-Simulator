@@ -27,11 +27,11 @@ public class Simulate {
 		List<Rules> possibleRules = possibleRulesStream.collect(Collectors.toList());
 
 		for(int i=0; i<possibleRules.size(); i++) {
-			if(possibleRules.get(i).getPilaFutura() == 'l') {
+			if(possibleRules.get(i).getPilaFutura() == "l") {
 				stack.pop();
 			} else {
-				char addStack = possibleRules.get(i).getPilaFutura();
-				stack.push(addStack);
+				String addStack = possibleRules.get(i).getPilaFutura();
+				stack.push(addStack.charAt(0));
 			}
 			
 			if(testWord(input.substring(1), possibleRules.get(i).getFutureState(), stack)){
