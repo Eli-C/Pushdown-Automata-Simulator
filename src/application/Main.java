@@ -1,5 +1,7 @@
 package application;
 	
+import java.util.ArrayList;
+import java.util.Stack;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.stage.Stage;
@@ -29,6 +31,24 @@ public class Main extends Application {
 	}
 	
 	public static void main(String[] args) {
+                String[] Q = new String[] {"Leer","Comp"};
+                char[] X = new char[] {'a','b','c'};
+                char[] P  = new char[] {'a','b','c'};
+                String Q0 = "Leer";
+                String Z0 = "Z";
+                String F[] = new String[] {};
+                ArrayList<Rules> rules = new ArrayList();
+                rules.add(new Rules("Leer",'a','Z',"Leer",'A'));
+                rules.add(new Rules("Leer",'b','Z',"Leer",'B'));
+                rules.add(new Rules("Leer",'c','Z',"Comp",'Z'));
+                rules.add(new Rules("Comp",'a','A',"Comp",'l'));
+                rules.add(new Rules("Comp",'b','B',"Comp",'l'));
+                Stack<Character> stack = new Stack<Character>();
+                stack.push('Z');
+                Automata m = new Automata(Q,X,P,Q0,Z0,F,rules);
+                Simulate s = new Simulate(m);
+                boolean result = s.testWord("aca", m.getQ0(),stack);
+                System.out.println("The word tested is " + result);
 		launch(args);
 	}
 }
