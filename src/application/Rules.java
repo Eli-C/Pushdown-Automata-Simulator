@@ -7,10 +7,9 @@ public class Rules {
 	private char input; 
 	private char pilaActual;
 	private String futureState;
-	private char pilaFutura;
+	private String pilaFutura;
 	
-	
-	public Rules (String actualState, char input, char pilaActual, String futureState, char pilaFutura)
+	public Rules (String actualState, char input, char pilaActual, String futureState, String pilaFutura)
 	{
 		this.actualState = actualState;
 		this.input = input;
@@ -35,6 +34,7 @@ public class Rules {
 	{
 		this.input = input;
 	}
+
 	public char getPilaActual() 
 	{
 		return pilaActual;
@@ -51,13 +51,12 @@ public class Rules {
 	{
 		this.futureState = futureState;
 	}
-	public char getPilaFutura() 
+	public String getPilaFutura() 
 	{
 		return pilaFutura;
 	}
-	public void setPilaFutura(char pilaFutura) 
+	public void setPilaFutura(String pilaFutura) 
 	{
 		this.pilaFutura = pilaFutura;
 	}
-
 }
