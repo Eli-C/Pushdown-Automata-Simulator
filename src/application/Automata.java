@@ -9,6 +9,12 @@ public class Automata {
 	private String Z0;
 	private AutomataState[] F;
 	
+	
+	public Automata()
+	{
+		
+	}
+	
 	public Automata(AutomataState[] Q, char[] X, char[] P, AutomataState q0, String Z0, AutomataState[] F)
 	{
 		this.Q = Q;
