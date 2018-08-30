@@ -11,6 +11,12 @@ public class Automata {
 	private String Z0;
 	private String[] F;
 	private ArrayList<Rules> rulesArray;
+
+	
+	public Automata()
+	{
+		
+	}
 	
 	public Automata(String[] Q, char[] X, char[] P, String q0, String Z0, String[] F, ArrayList<Rules> rules)
 	{
