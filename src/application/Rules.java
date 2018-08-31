@@ -7,9 +7,7 @@ public class Rules {
 	private char input; 
 	private String pilaActual;
 	private String futureState;
-	private String pilaFutura;
-	
-	
+	private String pilaFutura;]
 	public Rules (String actualState, char input, String pilaActual, String futureState, String pilaFutura)
 	{
 		this.actualState = actualState;
@@ -59,5 +57,4 @@ public class Rules {
 	{
 		this.pilaFutura = pilaFutura;
 	}
-
 }

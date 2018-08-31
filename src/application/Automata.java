@@ -10,7 +10,14 @@ public class Automata {
 	private String q0;
 	private String Z0;
 	private String[] F;
+
 	private ArrayList<Rules> rulesArray;
+
+	
+	public Automata()
+	{
+		
+	}
 	
 	public Automata(String[] Q, char[] X, char[] P, String q0, String Z0, String[] F, ArrayList<Rules> rules)
 	{
@@ -19,14 +26,10 @@ public class Automata {
 		this.P = P;
 		this.q0 = q0; 
 		this.Z0 = Z0;
-		this.F = F;
-		this.rulesArray = rules;
+		this.F = F;	
+                this.rulesArray = rules;
 	}
-	
-	public Automata() {
-		
-	}
-	
+        
 	public void setRules(Rules rule) {
 		rulesArray.add(rule);
 	}
@@ -38,7 +41,15 @@ public class Automata {
 	public Rules getRule(int i) {
 		return rulesArray.get(i);
 	}
-	
+        
+  public Rules deteleRule(int i) {
+    return rulesArray.remove(i);
+  }
+        
+  public Rules editRule(int i, Rules modifiedRule) {
+    return rulesArray.set(i, modifiedRule);
+  }
+
 	public String[] getQ() 
 	{
 		return Q;

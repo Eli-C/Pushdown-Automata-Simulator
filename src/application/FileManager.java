@@ -1,60 +1,39 @@
 package application;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.Writer;
 public class FileManager {
-	
-	private String path;
-	private String fileName;
-	private int operation;
-	private boolean current;
-	
-	
-	public FileManager(String path, String fileName, int operation, boolean current)
+    
+        private Gson jsonParser;
+		
+	public FileManager()
 	{
-		this.path = path;
-		this.fileName = fileName;
-		this.operation = operation;
-		this.current = current;
+                this.jsonParser = new GsonBuilder().setPrettyPrinting().create();
+                this.createBaseDirectory();
 	}
-	
-
-	public String getPath() 
-	{
-		return path;
-	}
-
-	public void setPath(String path) 
-	{
-		this.path = path;
-	}
-
-	public String getFileName() 
-	{
-		return fileName;
-	}
-
-	public void setFileName(String fileName) 
-	{
-		this.fileName = fileName;
-	}
-
-	public int getOperation() 
-	{
-		return operation;
-	}
-
-	public void setOperation(int operation) 
-	{
-		this.operation = operation;
-	}
-
-	public boolean isCurrent() 
-	{
-		return current;
-	}
-
-	public void setCurrent(boolean current) 
-	{
-		this.current = current;
-	}
-
+        
+        public void saveAutomata(String fileName, Automata automata) throws IOException {
+            Writer writer = new FileWriter("savedData/" + fileName + ".json");
+            System.out.print("Trying to save the automata");
+            this.jsonParser.toJson(automata,writer);   
+            writer.close();
+            System.out.print("Finished");
+        }
+        
+        public Automata getAutomata(String fileName) throws FileNotFoundException {
+            System.out.print("Trying to get back the automata");
+            FileReader reader = new FileReader("savedData/" + fileName + ".json");
+            Automata m = this.jsonParser.fromJson(reader, Automata.class);
+            return m;
+        }
+        
+        private void createBaseDirectory() {
+            new File("savedData").mkdir();
+        }
 }
