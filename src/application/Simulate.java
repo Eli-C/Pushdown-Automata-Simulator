@@ -9,12 +9,9 @@ import java.util.stream.Stream;
 public class Simulate {
 	private ArrayList<Rules> rules;
 	
-	public Simulate() {
-		Automata automata = new Automata();
-		ArrayList<Rules> rules = automata.getRules();
-		this.rules = rules;
+	public Simulate(Automata automata) {
+            this.rules = automata.getRules();
 	}
-	
 	public boolean testWord(String input, String state, Stack<String> stack) {
 		
 		if(input.isEmpty() && state == "Aceptar" || stack.isEmpty()) {
