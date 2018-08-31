@@ -5,11 +5,10 @@ public class Rules {
 	
 	private String actualState;
 	private char input; 
-	private char pilaActual;
+	private String pilaActual;
 	private String futureState;
-	private String pilaFutura;
-	
-	public Rules (String actualState, char input, char pilaActual, String futureState, String pilaFutura)
+	private String pilaFutura;]
+	public Rules (String actualState, char input, String pilaActual, String futureState, String pilaFutura)
 	{
 		this.actualState = actualState;
 		this.input = input;
@@ -34,12 +33,11 @@ public class Rules {
 	{
 		this.input = input;
 	}
-
-	public char getPilaActual() 
+	public String getPilaActual() 
 	{
 		return pilaActual;
 	}
-	public void setPilaActual(char pilaActual) 
+	public void setPilaActual(String pilaActual) 
 	{
 		this.pilaActual = pilaActual;
 	}
