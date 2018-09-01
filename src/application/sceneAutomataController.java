@@ -7,6 +7,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -20,6 +21,7 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TextInputDialog;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 
@@ -112,7 +114,7 @@ public class sceneAutomataController {
 	    
 	    
 	    Automata automata = new Automata();
-    	ArrayList<String> Q = new ArrayList<>();
+            ArrayList<String> Q = new ArrayList<>();
 	    
 	    public sceneAutomataController()
 	    {
@@ -123,6 +125,11 @@ public class sceneAutomataController {
 	    @FXML
 	    private void initialize()
 	    {
+                this.loadRecentFiles();
+	    }
+            
+            private void loadRecentFiles() {
+                this.recentFilesList.getItems().clear();
                 try {
                     Files.newDirectoryStream(Paths.get("./savedData"),path -> path.toString().endsWith(".json"))
                             .forEach(filePath -> this.recentFilesList.getItems().add(filePath.getFileName()));
@@ -133,7 +140,7 @@ public class sceneAutomataController {
                     errorAlert.showAndWait();	
                     
                 }
-	    }
+            }
 
             
             @FXML
@@ -147,6 +154,32 @@ public class sceneAutomataController {
                     this.mainTab.getSelectionModel().selectNext();
                 }
                 
+            }
+            
+            @FXML
+            public void saveFile() {
+                FileManager fm = new FileManager();
+                TextInputDialog dialog = new TextInputDialog("myFile");
+                dialog.setTitle("Filename");
+                dialog.setHeaderText("To save your file we need a name.");
+                dialog.setContentText("Please enter your fileName: ");
+                Optional<String> result = dialog.showAndWait();
+                result.ifPresent(name -> {
+                    try {
+                        fm.saveAutomata(name, automata);
+                    } catch (IOException ex) {
+                        Alert errorAlert = new Alert(AlertType.ERROR);
+                        errorAlert.setHeaderText("Error while saving file");
+                        errorAlert.setContentText("FileName not valid.");
+                        errorAlert.showAndWait();		
+                    }
+                });
+
+            }
+            
+            @FXML 
+            public void reRenderFiles() {
+                this.loadRecentFiles();
             }
 	     
 	    @FXML
