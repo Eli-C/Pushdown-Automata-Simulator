@@ -60,9 +60,12 @@ public class Main extends Application {
                 Stack<String> stack = new Stack<String>();
                 stack.push("Z");
                 Automata m = new Automata(Q,X,P,Q0,Z0,F,rules);
-                Simulate s = new Simulate(m);
-                boolean result = s.testWord("aca", m.getQ0(),stack);
-                System.out.println("The word tested is " + result);
+                FileManager fm = new FileManager();
+                try {
+                    fm.saveAutomata("example3", m);
+                } catch(IOException exception) {
+                    System.out.println("error while saving: " + exception);
+                }
                 launch(args);
 	}
 }

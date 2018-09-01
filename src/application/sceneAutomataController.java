@@ -1,21 +1,37 @@
 package application;
 
+
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
-
-//import java.awt.Button;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.ListView;
+import javafx.scene.control.Tab;
+import javafx.scene.control.TabPane;
 import javafx.scene.control.TextField;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 
 
 public class sceneAutomataController {
 	
+            @FXML
+            private TabPane mainTab;
+    
+            @FXML 
+            private Tab formalDefinitionTab;
+            
 	    @FXML
 	    private Button btnEstadoInicial;
 
@@ -48,7 +64,13 @@ public class sceneAutomataController {
 
 	    @FXML
 	    private TextField inputConjuntoEstados;
+            
+            @FXML
+            private ListView recentFilesList;
 
+            @FXML 
+            private Tab automataTab;
+            
 	    @FXML
 	    private AnchorPane rulesShow;
 
@@ -101,9 +123,31 @@ public class sceneAutomataController {
 	    @FXML
 	    private void initialize()
 	    {
-
+                try {
+                    Files.newDirectoryStream(Paths.get("./savedData"),path -> path.toString().endsWith(".json"))
+                            .forEach(filePath -> this.recentFilesList.getItems().add(filePath.getFileName()));
+                } catch (IOException ex) {
+                    Alert errorAlert = new Alert(AlertType.ERROR);
+                    errorAlert.setHeaderText("No files found");
+                    errorAlert.setContentText(ex.toString());
+                    errorAlert.showAndWait();	
+                    
+                }
 	    }
 
+            
+            @FXML
+            public void getFile(MouseEvent event) {
+                if(event.getClickCount() == 2) {
+                    String fileSelected = this.recentFilesList.getSelectionModel().getSelectedItem().toString();
+                    Alert infoAlert = new Alert(AlertType.INFORMATION);
+                    infoAlert.setHeaderText("Loading your file");
+                    infoAlert.setContentText("Opening your saved file. Click on Ok to continue...");
+                    infoAlert.showAndWait();	
+                    this.mainTab.getSelectionModel().selectNext();
+                }
+                
+            }
 	     
 	    @FXML
 	    public void read_Q()
