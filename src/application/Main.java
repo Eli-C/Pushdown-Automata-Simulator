@@ -1,5 +1,6 @@
 package application;
 
+import com.guigarage.flatterfx.FlatterFX;
 import java.util.ArrayList;
 import java.util.Stack;
 import java.io.FileNotFoundException;
@@ -27,8 +28,11 @@ public class Main extends Application {
 			Parent root = FXMLLoader.load(getClass().getResource("sceneAutomata.fxml"));
 			
 			primaryStage.setTitle("Automata Simulator");
-			primaryStage.setScene(new Scene(root));
+                        Scene scene = new Scene(root);
+                        scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
+			primaryStage.setScene(scene);
 			primaryStage.show();
+                        //FlatterFX.style();
 			
 			/*BorderPane root = new BorderPane();
 			
