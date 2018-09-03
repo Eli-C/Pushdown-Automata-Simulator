@@ -13,15 +13,18 @@ public class Simulate {
             this.rules = automata.getRules();
 	}
 	public boolean testWord(String input, String state, Stack<String> stack) {
-		System.out.println("input = " + input);
+		System.out.println("input = " + input + " state = " + state + " stack = " + stack.toString());
 		if(input.isEmpty() && state == "Aceptar" || stack.isEmpty()) {
 			System.out.println("Found solution");
 			return true;
 		}
-		String pilaActual = stack.pop();
+		Stack<String> copyStack = (Stack<String>) stack.clone();
+		String pilaActual = copyStack.pop();
+		System.out.println("pilaActual = " + pilaActual);
 		char word = Character.valueOf(input.charAt(0));
 		Stream<Rules> possibleRulesStream = rules.stream().filter(rule -> ((rule.getInput() == word) && (rule.getActualState() == state) && (rule.getPilaActual() == pilaActual)));
 		List<Rules> possibleRules = possibleRulesStream.collect(Collectors.toList());
+		System.out.println("Possible rules are: " + possibleRules.toString());
 
 		for(int i=0; i<possibleRules.size(); i++) {
 			System.out.println("Current Stack is: " + stack.toString());
