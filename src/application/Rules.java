@@ -16,6 +16,10 @@ public class Rules {
 		this.futureState = futureState;
 		this.pilaFutura = pilaFutura;
 	}
+        
+        public String getFormatedRule() {
+            return "< " + this.actualState + ", " + this.input + ", " + this.pilaActual + ", " + this.futureState + ", " + this.pilaFutura + " >";
+        }
 	
 	public String getActualState() 
 	{
