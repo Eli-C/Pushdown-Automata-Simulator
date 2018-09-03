@@ -8,9 +8,11 @@ import java.util.stream.Stream;
 
 public class Simulate {
 	private ArrayList<Rules> rules;
+	private ArrayList<Integer> solution;
 	
 	public Simulate(Automata automata) {
             this.rules = automata.getRules();
+            this.solution = new ArrayList<Integer>();
 	}
 	public boolean testWord(String input, String state, Stack<String> stack) {
 		System.out.println("input = " + input + " state = " + state + " stack = " + stack.toString());
@@ -22,7 +24,8 @@ public class Simulate {
 		String pilaActual = copyStack.pop();
 		System.out.println("pilaActual = " + pilaActual);
 		char word = Character.valueOf(input.charAt(0));
-		Stream<Rules> possibleRulesStream = rules.stream().filter(rule -> ((rule.getInput() == word) && (rule.getActualState() == state) && (rule.getPilaActual() == pilaActual)));
+		System.out.println("word to be inserted = " + word);
+		Stream<Rules> possibleRulesStream = rules.stream().filter(rule -> ((rule.getInput() == word) && (rule.getActualState().equals(state)) && (rule.getPilaActual().equals(pilaActual))));
 		List<Rules> possibleRules = possibleRulesStream.collect(Collectors.toList());
 		System.out.println("Possible rules are: " + possibleRules.toString());
 
@@ -41,6 +44,8 @@ public class Simulate {
 			}
 			
 			if(testWord(input.substring(1), possibleRules.get(i).getFutureState(), stack)){
+				solution.add(rules.indexOf(possibleRules.get(i)));
+				System.out.println(solution.toString());
 				return true;
 			}
 		}
