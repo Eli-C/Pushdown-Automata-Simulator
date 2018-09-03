@@ -46,23 +46,23 @@ public class Main extends Application {
 	
 	public static void main(String[] args) {
                 String[] Q = new String[] {"Leer","Comp"};
-                char[] X = new char[] {'a','b','c'};
-                char[] P  = new char[] {'a','b','c'};
+                char[] X = new char[] {'a','b'};
+                char[] P  = new char[] {'a','b'};
                 String Q0 = "Leer";
                 String Z0 = "Z";
                 String F[] = new String[] {};
-                ArrayList<Rules> rules = new ArrayList();
-                rules.add(new Rules("Leer",'a','Z',"Leer",'A'));
-                rules.add(new Rules("Leer",'b','Z',"Leer",'B'));
-                rules.add(new Rules("Leer",'c','Z',"Comp",'Z'));
-                rules.add(new Rules("Comp",'a','A',"Comp",'l'));
-                rules.add(new Rules("Comp",'b','B',"Comp",'l'));
-                Stack<Character> stack = new Stack<Character>();
-                stack.push('Z');
+                ArrayList<Rules> rules = new ArrayList<Rules>();
+                rules.add(new Rules("Leer",'a',"Z","Leer","AZ"));
+                rules.add(new Rules("Leer",'a',"A","Leer","AA"));
+                rules.add(new Rules("Leer",'b',"A","Comp","lambda"));
+                rules.add(new Rules("Comp",'b',"A","Comp","lambda"));
+                rules.add(new Rules("Comp",'l',"Z","Aceptar","lambda"));
+                Stack<String> stack = new Stack<String>();
+                stack.push("Z");
                 Automata m = new Automata(Q,X,P,Q0,Z0,F,rules);
                 Simulate s = new Simulate(m);
-                boolean result = s.testWord("aca", m.getQ0(),stack);
-                System.out.println("The word tested is " + result);
+                boolean result = s.testWord("aabbl", m.getQ0(), stack);
+                System.out.println("The result for word test is " + result);
                 launch(args);
 	}
 }

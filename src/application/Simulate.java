@@ -13,8 +13,9 @@ public class Simulate {
             this.rules = automata.getRules();
 	}
 	public boolean testWord(String input, String state, Stack<String> stack) {
-		
+		System.out.println("input = " + input);
 		if(input.isEmpty() && state == "Aceptar" || stack.isEmpty()) {
+			System.out.println("Found solution");
 			return true;
 		}
 		String pilaActual = stack.pop();
@@ -23,15 +24,17 @@ public class Simulate {
 		List<Rules> possibleRules = possibleRulesStream.collect(Collectors.toList());
 
 		for(int i=0; i<possibleRules.size(); i++) {
+			System.out.println("Current Stack is: " + stack.toString());
 			if(possibleRules.get(i).getPilaFutura() == "lambda") {
 				stack.pop();
+				System.out.println("Stack popped is: " + stack.toString());
 			} else {
 				String addStack = possibleRules.get(i).getPilaFutura();
-				String stackIt = "";
 				for(int j=0; j<addStack.length()-1; j++) {
-					
+					char convert = addStack.charAt(i);
+					stack.push(Character.toString(convert));
+					System.out.println("Stack inserted is: " + stack.toString());
 				}
-				stack.push(addStack);
 			}
 			
 			if(testWord(input.substring(1), possibleRules.get(i).getFutureState(), stack)){
