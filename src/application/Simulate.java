@@ -34,7 +34,7 @@ public class Simulate {
 
 		for(int i=0; i<possibleRules.size(); i++) {
 			System.out.println("Current Stack is: " + stack.toString());
-			if(possibleRules.get(i).getPilaFutura() == "lambda") {
+			if(possibleRules.get(i).getPilaFutura().equals("lambda")) {
 				stack.pop();
 				System.out.println("Stack popped is: " + stack.toString());
 			} else {

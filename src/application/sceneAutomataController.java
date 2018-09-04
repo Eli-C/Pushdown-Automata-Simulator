@@ -12,10 +12,14 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Optional;
+import java.util.Stack;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.animation.FadeTransition;
 import javafx.animation.PathTransition;
 import javafx.animation.Timeline;
+import javafx.animation.TranslateTransition;
+import javafx.application.Platform;
 
 
 import javafx.fxml.FXML;
@@ -115,9 +119,9 @@ public class sceneAutomataController {
 
 	@FXML
 	private TextField inputString;
-
-	@FXML
-	private Label currentWord;
+        
+        @FXML
+        private Label labelCurrentInput;
 
 	@FXML
 	private Label initStack;
@@ -179,6 +183,8 @@ public class sceneAutomataController {
 	String Z0_Scene;
 	ArrayList<String> F_Scene = new ArrayList<>();
 
+        ArrayList<Integer> solution;
+        int contador = 0;
 	boolean q0Exists = false;
 	boolean Z0Exists = false;
 
@@ -202,6 +208,9 @@ public class sceneAutomataController {
 		this.inputPilaActual.setTooltip(new Tooltip("Pila Actual"));
 		this.inputEstadoFuturo.setTooltip(new Tooltip("Estado Futuro"));
 		this.inputPilaFutura.setTooltip(new Tooltip("Pila Futura"));
+    this.inputPilaFutura.getItems().add("lambda");
+    this.inputPilaActual.getItems().add("Z");
+    this.inputCE.getItems().add("l");
 		this.btnAddRule.setDisable(true);
 	}
 
@@ -220,6 +229,7 @@ public class sceneAutomataController {
 			this.mainTab.getSelectionModel().selectNext();
 			try {
 				this.automata = this.fm.getAutomata(fileSelected);
+                                this.loadResources(this.automata);
 			} catch (FileNotFoundException ex) {
 				Alert errorAlert = new Alert(AlertType.ERROR);
 				errorAlert.setHeaderText("Oops! There was a problem");
@@ -244,6 +254,7 @@ public class sceneAutomataController {
 		try {
 			this.automata = this.fm.getAutomata(filename);
 			this.projectName.setText(filename.toUpperCase());
+                        this.loadResources(this.automata);
 		} catch (FileNotFoundException ex) {
 			Alert errorAlert = new Alert(AlertType.ERROR);
 			errorAlert.setHeaderText("Oops! There was a problem");
@@ -275,10 +286,42 @@ public class sceneAutomataController {
 		});
 
 	}
+        
+        private void loadResources(Automata m) {
+            this.inputActualState.getItems().addAll(m.getQ());
+            this.inputEstadoFuturo.getItems().addAll(m.getQ());
+            this.inputCE.getItems().addAll(m.getX());
+            this.inputPilaActual.getItems().addAll(m.getP());
+            this.inputPilaFutura.getItems().addAll(m.getP());
+            for(Rules r: this.automata.getRules()) {
+                this.inputRuleEdit.getItems().add(r.getFormatedRule());
+            }
+            
+        }
 
 	@FXML 
 	public void reRender() {
 		this.loadRecentFiles();
+	}
+        
+        private void loadRecentFiles() {
+		this.recentFilesList.getItems().clear();
+		this.menuOpenFile.getItems().clear();
+		try {
+			Files.newDirectoryStream(Paths.get("./savedData"),path -> path.toString().endsWith(".json"))
+			.forEach(filePath -> { 
+				RadioMenuItem r1 = new RadioMenuItem(filePath.getFileName().toString());
+				r1.setToggleGroup(this.toggleGroup);
+				this.recentFilesList.getItems().add(filePath.getFileName());
+				this.menuOpenFile.getItems().add(r1);
+			});
+		} catch (IOException ex) {
+			Alert errorAlert = new Alert(AlertType.ERROR);
+			errorAlert.setHeaderText("No files found");
+			errorAlert.setContentText(ex.toString());
+			errorAlert.showAndWait();	
+
+		}
 	}
 
 
@@ -388,29 +431,92 @@ public class sceneAutomataController {
 			this.inputString.setDisable(false);
 			this.btnStart.getStyleClass().set(1, "success");
 			this.btnStart.setText("Start");
-		}                    
-	}
-
-
-	private void loadRecentFiles() {
-		this.recentFilesList.getItems().clear();
-		this.menuOpenFile.getItems().clear();
-		try {
-			Files.newDirectoryStream(Paths.get("./savedData"),path -> path.toString().endsWith(".json"))
-			.forEach(filePath -> { 
-				RadioMenuItem r1 = new RadioMenuItem(filePath.getFileName().toString());
-				r1.setToggleGroup(this.toggleGroup);
-				this.recentFilesList.getItems().add(filePath.getFileName());
-				this.menuOpenFile.getItems().add(r1);
-			});
-		} catch (IOException ex) {
-			Alert errorAlert = new Alert(AlertType.ERROR);
-			errorAlert.setHeaderText("No files found");
-			errorAlert.setContentText(ex.toString());
-			errorAlert.showAndWait();	
-
 		}
+                
+                this.contador = 0;
+                
+                Simulate simulador = new Simulate(this.automata);
+                Stack<String> stack = new Stack<String>();
+                stack.push("Z");
+                simulador.testWord(this.inputString.getText(),this.automata.getQ0(),stack);
+                this.solution = simulador.getSolution();
+                this.animate();
 	}
+
+        
+        private void animate() {
+            if(this.solution.size() < 1) {
+                return;
+            } else {
+                int indexRule = this.solution.get(0);
+                this.solution.remove(0);
+                Rules r = this.automata.getRule(indexRule);
+                Label copy = new Label();
+                copy.setText(this.inputString.getText().substring(0, 1).toUpperCase());
+                copy.getStyleClass().add("mainLabel");
+                copy.setLayoutX(680);
+                copy.setLayoutY(110);
+                switch(r.getOperation()) {
+                    case Rules.APILAR:
+                        if(!(this.inputString.getText().isEmpty())) {
+                            this.contador = this.contador + 20;
+                            this.inputString.setText(this.inputString.getText().substring(1));
+                            this.pane.getChildren().add(copy);
+                            TranslateTransition transition = new TranslateTransition();
+                            transition.setDuration(Duration.seconds(3));
+                            transition.setNode(copy);
+                            System.out.println("Contador Apilando:" + this.contador);
+                            transition.setToY(490  - this.contador);
+                            transition.setToX(180);
+                            transition.setOnFinished(e -> this.animate());
+                            transition.play();
+                        }
+                    break;
+                    case Rules.DESAPILAR:
+                        FadeTransition fadeTransition = new FadeTransition();
+                        fadeTransition.setDuration(Duration.seconds(3));
+                        this.contador = this.contador - 20;
+                        if(this.inputString.getText().equals("l")) {
+                            this.inputString.setText(this.inputString.getText().substring(1));
+                            Alert alert = new Alert(AlertType.INFORMATION);
+                            alert.setTitle("SUCCESS!");
+                            alert.setHeaderText("Simulation finished!");
+                            Platform.runLater(alert::showAndWait);
+                            this.btnAddRule.setDisable(false);
+                            this.inputActualState.setDisable(false);
+                            this.inputCE.setDisable(false);
+                            this.inputPilaActual.setDisable(false);
+                            this.inputEstadoFuturo.setDisable(false);
+                            this.inputPilaFutura.setDisable(false);
+                            this.topMenu.setDisable(false);
+                            this.formalDefinitionTab.setDisable(false);
+                            this.inputString.setDisable(false);
+                            this.btnStart.getStyleClass().set(1, "success");
+                            this.btnStart.setText("Start");
+                            return;
+                            
+                        } else {
+                            fadeTransition.setNode(this.pane.getChildren().get(this.pane.getChildren().size()-1));
+                            this.inputString.setText(this.inputString.getText().substring(1));
+                        }
+                        
+                        fadeTransition.setFromValue(1);
+                        fadeTransition.setToValue(0);
+                        fadeTransition.setOnFinished(e -> {
+                            this.pane.getChildren().remove(this.pane.getChildren().size()-1);
+                            this.animate();
+                        });
+                        fadeTransition.play();
+                        
+                    break;
+                    case Rules.NOTHING:
+                        this.animate();
+                    break;
+                }
+            
+            }
+        }
+
 
 
 
@@ -431,7 +537,6 @@ public class sceneAutomataController {
 
 		}
 	}
-
 
 
 	@FXML
@@ -484,9 +589,11 @@ public class sceneAutomataController {
 		else 
 		{
 			P_Scene.add(inputAfabetoPila.getText());
+                        P_Scene.add(inputAfabetoPila.getText().concat("Z"));
+                        P_Scene.add(inputAfabetoPila.getText().concat(inputAfabetoPila.getText()));
 			inputPilaActual.getItems().add(inputAfabetoPila.getText());
-			inputPilaFutura.getItems().add(inputAfabetoPila.getText());
-
+			inputPilaFutura.getItems().add(inputAfabetoPila.getText() + "Z");
+      inputPilaFutura.getItems().add(inputAfabetoPila.getText().concat(inputAfabetoPila.getText()));
 			successMessageAlert();
 			inputAfabetoPila.setText("");
 		}
