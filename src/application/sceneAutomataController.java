@@ -10,6 +10,8 @@ import java.util.Iterator;
 import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.animation.PathTransition;
+import javafx.animation.Timeline;
 
 
 import javafx.fxml.FXML;
@@ -17,13 +19,23 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.control.MenuBar;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextInputDialog;
+import javafx.scene.control.Tooltip;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.shape.ArcTo;
+import javafx.scene.shape.CubicCurveTo;
+import javafx.scene.shape.LineTo;
+import javafx.scene.shape.MoveTo;
+import javafx.scene.shape.Path;
+import javafx.scene.shape.PathElement;
+import javafx.util.Duration;
 
 
 public class sceneAutomataController {
@@ -36,6 +48,10 @@ public class sceneAutomataController {
             
 	    @FXML
 	    private Button btnEstadoInicial;
+            
+            
+            @FXML
+            private MenuBar topMenu;    
 
 	    @FXML
 	    private ChoiceBox<?> inputActualState;
@@ -60,6 +76,9 @@ public class sceneAutomataController {
 
 	    @FXML
 	    private ChoiceBox<?> inputCE;
+            
+            @FXML
+            private Label editDeleteRuleLabel;
 
 	    @FXML
 	    private TextField inputEstadoInicial;
@@ -73,6 +92,15 @@ public class sceneAutomataController {
             @FXML 
             private Tab automataTab;
             
+            @FXML
+            private TextField inputString;
+            
+            @FXML
+            private Label currentWord;
+            
+            @FXML
+            private Label initStack;
+            
 	    @FXML
 	    private AnchorPane rulesShow;
 
@@ -85,8 +113,11 @@ public class sceneAutomataController {
 	    @FXML
 	    private AnchorPane inputCadenaEntrada;
 
+            @FXML
+	    private Button btnEditRule;
+            
 	    @FXML
-	    private Button bntDeleteRule;
+	    private Button btnDeleteRule;
 
 	    @FXML
 	    private ChoiceBox<?> inputEstadoFuturo;
@@ -126,22 +157,16 @@ public class sceneAutomataController {
 	    private void initialize()
 	    {
                 this.loadRecentFiles();
+                this.editDeleteRuleLabel.setVisible(false);
+                this.inputRuleEdit.setVisible(false);
+                this.btnDeleteRule.setVisible(false);
+                this.btnEditRule.setVisible(false);
+                this.inputActualState.setTooltip(new Tooltip("Estado Actual"));
+                this.inputCE.setTooltip(new Tooltip("Entrada"));
+                this.inputPilaActual.setTooltip(new Tooltip("Pila Actual"));
+                this.inputEstadoFuturo.setTooltip(new Tooltip("Estado Futuro"));
+                this.inputPilaFutura.setTooltip(new Tooltip("Pila Futura"));
 	    }
-            
-            private void loadRecentFiles() {
-                this.recentFilesList.getItems().clear();
-                try {
-                    Files.newDirectoryStream(Paths.get("./savedData"),path -> path.toString().endsWith(".json"))
-                            .forEach(filePath -> this.recentFilesList.getItems().add(filePath.getFileName()));
-                } catch (IOException ex) {
-                    Alert errorAlert = new Alert(AlertType.ERROR);
-                    errorAlert.setHeaderText("No files found");
-                    errorAlert.setContentText(ex.toString());
-                    errorAlert.showAndWait();	
-                    
-                }
-            }
-
             
             @FXML
             public void getFile(MouseEvent event) {
@@ -178,7 +203,7 @@ public class sceneAutomataController {
             }
             
             @FXML 
-            public void reRenderFiles() {
+            public void reRender() {
                 this.loadRecentFiles();
             }
 	     
@@ -200,6 +225,125 @@ public class sceneAutomataController {
             	}
 	    	//automata.setQ(Q);
 	    }
+            
+            @FXML
+            public void showEditComponent() {
+                this.editDeleteRuleLabel.setVisible(true);
+                this.inputRuleEdit.setVisible(true);
+                this.btnDeleteRule.setVisible(true);
+                this.btnEditRule.setVisible(true);
+            }
+            
+            
+            @FXML
+            public void addRule() {
+                Rules rule = new Rules();
+                rule.setActualState(this.inputActualState.getSelectionModel().getSelectedItem().toString());
+                rule.setInput(this.inputCE.getSelectionModel().getSelectedItem().toString());
+                rule.setPilaActual(this.inputPilaActual.getSelectionModel().getSelectedItem().toString());
+                rule.setFutureState(this.inputEstadoFuturo.getSelectionModel().getSelectedItem().toString());
+                rule.setPilaFutura(this.inputPilaFutura.getSelectionModel().getSelectedItem().toString());
+                
+                if(this.btnAddRule.getText().equals("Edit")) {
+                    int index = this.inputRuleEdit.getSelectionModel().getSelectedIndex();
+                    this.automata.editRule(index, rule);
+                    this.btnAddRule.setText("Add");
+                    this.btnAddRule.getStyleClass().set(2, "primary");
+                } else {
+                    this.automata.setRules(rule);
+                }
+            }
+            
+            @FXML
+            public void EditRule() {
+                int index = this.inputRuleEdit.getSelectionModel().getSelectedIndex();
+                this.inputRuleEdit.getSelectionModel().select(index);
+                this.editDeleteRuleLabel.setVisible(false);
+                this.inputRuleEdit.setVisible(false);
+                this.btnDeleteRule.setVisible(false);
+                this.btnEditRule.setVisible(false);
+                this.btnAddRule.setText("Edit");
+                this.btnAddRule.getStyleClass().set(2, "info");
+            }
+            
+            @FXML
+            public void DeleteRule() {
+                this.editDeleteRuleLabel.setVisible(false);
+                this.inputRuleEdit.setVisible(false);
+                this.btnDeleteRule.setVisible(false);
+                this.btnEditRule.setVisible(false);
+            }
+            
+            
+            @FXML 
+            public void simulate() {
+                
+                if(this.btnStart.getText().equals("Start")) {
+                    this.btnAddRule.setDisable(true);
+                    this.inputActualState.setDisable(true);
+                    this.inputCE.setDisable(true);
+                    this.inputPilaActual.setDisable(true);
+                    this.inputEstadoFuturo.setDisable(true);
+                    this.inputPilaFutura.setDisable(true);
+                    this.topMenu.setDisable(true);
+                    this.formalDefinitionTab.setDisable(true);
+                    this.inputString.setDisable(true);
+                    this.btnStart.getStyleClass().set(1, "danger");
+                    this.btnStart.setText("Stop");
+                    
+                } else {
+                    this.btnAddRule.setDisable(false);
+                    this.inputActualState.setDisable(false);
+                    this.inputCE.setDisable(false);
+                    this.inputPilaActual.setDisable(false);
+                    this.inputEstadoFuturo.setDisable(false);
+                    this.inputPilaFutura.setDisable(false);
+                    this.topMenu.setDisable(false);
+                    this.formalDefinitionTab.setDisable(false);
+                    this.inputString.setDisable(false);
+                    this.btnStart.getStyleClass().set(1, "success");
+                    this.btnStart.setText("Start");
+                }
+                
+                
+               
+//                PathElement[] path2 = {
+//                  new MoveTo(this.currentWord.getLayoutX() + 20,this.currentWord.getLayoutY()),
+//                  new ArcTo(100,100,0,this.currentWord.getLayoutX(),this.currentWord.getLayoutY(),false,false),
+//                  new LineTo(this.initStack.getLayoutX(),this.initStack.getLayoutY())
+//                };
+//                Path path = new Path();
+//                path.getElements().add(new MoveTo(10,10));
+//                path.getElements().add(new CubicCurveTo(380, 0, 380, 120, 200, 120));
+//                path.getElements().add(new CubicCurveTo(0, 120, 0, 240, 380, 240));
+//                path.getElements().add(new MoveTo(40,300));
+//                path.getElements().add(new CubicCurveTo(380, 0, 380, 380, 200, 120));
+//                path.getElements().add(new CubicCurveTo(0, 120, 0, 380, 380, 240));
+//                PathTransition pathTransition = new PathTransition();
+//                pathTransition.setDuration(Duration.millis(9000));
+//                pathTransition.setPath(path);
+//                pathTransition.setNode(this.currentWord);
+//                pathTransition.setOrientation(PathTransition.OrientationType.ORTHOGONAL_TO_TANGENT);
+//                pathTransition.setCycleCount(Timeline.INDEFINITE);
+//                pathTransition.setAutoReverse(true);
+//                pathTransition.play();
+                    
+            }
+            
+            
+            private void loadRecentFiles() {
+                this.recentFilesList.getItems().clear();
+                try {
+                    Files.newDirectoryStream(Paths.get("./savedData"),path -> path.toString().endsWith(".json"))
+                            .forEach(filePath -> this.recentFilesList.getItems().add(filePath.getFileName()));
+                } catch (IOException ex) {
+                    Alert errorAlert = new Alert(AlertType.ERROR);
+                    errorAlert.setHeaderText("No files found");
+                    errorAlert.setContentText(ex.toString());
+                    errorAlert.showAndWait();	
+                    
+                }
+            }
 	    
 	    
 
