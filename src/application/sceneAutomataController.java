@@ -12,10 +12,13 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Optional;
+import java.util.Stack;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.animation.FadeTransition;
 import javafx.animation.PathTransition;
 import javafx.animation.Timeline;
+import javafx.animation.TranslateTransition;
 
 
 import javafx.fxml.FXML;
@@ -112,9 +115,9 @@ public class sceneAutomataController {
 
 	@FXML
 	private TextField inputString;
-
-	@FXML
-	private Label currentWord;
+        
+        @FXML
+        private Label labelCurrentInput;
 
 	@FXML
 	private Label initStack;
@@ -197,6 +200,9 @@ public class sceneAutomataController {
 		this.inputPilaActual.setTooltip(new Tooltip("Pila Actual"));
 		this.inputEstadoFuturo.setTooltip(new Tooltip("Estado Futuro"));
 		this.inputPilaFutura.setTooltip(new Tooltip("Pila Futura"));
+                this.inputPilaFutura.getItems().add("lambda");
+                this.inputPilaActual.getItems().add("Z");
+                this.inputCE.getItems().add("l");
 	}
 
 
@@ -214,6 +220,7 @@ public class sceneAutomataController {
 			this.mainTab.getSelectionModel().selectNext();
 			try {
 				this.automata = this.fm.getAutomata(fileSelected);
+                                this.loadResources(this.automata);
 			} catch (FileNotFoundException ex) {
 				Alert errorAlert = new Alert(AlertType.ERROR);
 				errorAlert.setHeaderText("Oops! There was a problem");
@@ -237,6 +244,7 @@ public class sceneAutomataController {
 		try {
 			this.automata = this.fm.getAutomata(filename);
 			this.projectName.setText(filename.toUpperCase());
+                        this.loadResources(this.automata);
 		} catch (FileNotFoundException ex) {
 			Alert errorAlert = new Alert(AlertType.ERROR);
 			errorAlert.setHeaderText("Oops! There was a problem");
@@ -268,6 +276,15 @@ public class sceneAutomataController {
 		});
 
 	}
+        
+        private void loadResources(Automata m) {
+            this.inputActualState.getItems().addAll(m.getQ());
+            this.inputEstadoFuturo.getItems().addAll(m.getQ());
+            this.inputCE.getItems().addAll(m.getX());
+            this.inputPilaActual.getItems().addAll(m.getP());
+            this.inputPilaFutura.getItems().addAll(m.getP());
+            
+        }
 
 	@FXML 
 	public void reRender() {
@@ -369,7 +386,35 @@ public class sceneAutomataController {
 			this.inputString.setDisable(false);
 			this.btnStart.getStyleClass().set(1, "success");
 			this.btnStart.setText("Start");
-		}                    
+		}
+                
+                int contador = 0;
+                
+                Simulate simulador = new Simulate(this.automata);
+                Stack<String> stack = new Stack<String>();
+                stack.push("Z");
+                simulador.testWord(this.inputString.getText(),this.automata.getQ0(),stack);
+                for(int i =0; i<simulador.getSolution().size();i++) {
+                    int indexRule = simulador.getSolution().get(i);
+                    Rules r = this.automata.getRule(indexRule);
+                    Label copy = new Label();
+                    copy.setText(this.inputString.getText().substring(0, 1).toUpperCase());
+                    copy.getStyleClass().add("mainLabel");
+                    copy.setLayoutX(680);
+                    copy.setLayoutY(110);
+                    switch(r.getOperation()) {
+                        case Rules.APILAR: 
+                            this.Apilar(contador,copy);
+                            contador = contador - 15;
+                        break;
+                        case Rules.DESAPILAR:
+                            this.Desapilar(copy);
+                            contador = contador + 15;
+                            break;
+                        case Rules.NOTHING:
+                            break;
+                    }
+                }
 	}
 
 
@@ -393,7 +438,31 @@ public class sceneAutomataController {
 		}
 	}
 
+        
+        private void Apilar(int contador,Label copy) {
+             if(!(this.inputString.getText().isEmpty())) {
+                        this.pane.getChildren().add(copy);
+                        this.inputString.setText(this.inputString.getText().substring(1));
 
+                        TranslateTransition transition = new TranslateTransition();
+                        transition.setDuration(Duration.seconds(2));
+                        transition.setNode(copy);
+
+                        transition.setToY(490  - contador);
+                        transition.setToX(180);
+                        transition.play();
+                    }
+        }
+        
+        private void Desapilar(Label copy) {
+            FadeTransition fadeTransition = new FadeTransition();
+            fadeTransition.setDuration(Duration.seconds(2));
+            fadeTransition.setNode(copy);
+            fadeTransition.setFromValue(1);
+            fadeTransition.setFromValue(0);
+            fadeTransition.play();
+            this.pane.getChildren().remove(copy);
+        }
 
 
 	@FXML
@@ -446,8 +515,11 @@ public class sceneAutomataController {
 		else 
 		{
 			P_Scene.add(inputAfabetoPila.getText());
+                        P_Scene.add(inputAfabetoPila.getText().concat("Z"));
+                        P_Scene.add(inputAfabetoPila.getText().concat(inputAfabetoPila.getText()));
 			inputPilaActual.getItems().add(inputAfabetoPila.getText());
-			inputPilaFutura.getItems().add(inputAfabetoPila.getText());
+			inputPilaFutura.getItems().add(inputAfabetoPila.getText() + "Z");
+                        inputPilaFutura.getItems().add(inputAfabetoPila.getText().concat(inputAfabetoPila.getText()));
 			
 			successMessageAlert();
 			inputAfabetoPila.setText("");

@@ -8,6 +8,10 @@ public class Rules {
 	private String pilaActual;
 	private String futureState;
 	private String pilaFutura;
+        
+        static final int APILAR = 1;
+        static final int DESAPILAR = 0;
+        static final int NOTHING = -1;
 
 	      
         public Rules() {
@@ -23,6 +27,19 @@ public class Rules {
 		this.futureState = futureState;
 		this.pilaFutura = pilaFutura;
 	}
+        
+        
+        public int getOperation() {
+            if(pilaFutura.length() > pilaActual.length()) {
+                return APILAR;
+            } else if (pilaFutura.equals("lambda")) {
+                return DESAPILAR;
+            } else if (pilaActual.equals(pilaActual)) {
+                return NOTHING;
+            }
+            return NOTHING;
+        }
+        
         
         public String getFormatedRule() {
             return "< " + this.actualState + ", " + this.input + ", " + this.pilaActual + ", " + this.futureState + ", " + this.pilaFutura + " >";

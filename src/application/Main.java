@@ -48,7 +48,7 @@ public class Main extends Application {
                 P.add("a");
                 P.add("b");
                 String Q0 = "Leer";
-                String Z0 = "Z";
+                String Z0 = "Z";    
                 ArrayList<String> F = new ArrayList<>();
                 ArrayList<Rules> rules = new ArrayList<Rules>();
                 rules.add(new Rules("Leer",'a',"Z","Leer","AZ"));
