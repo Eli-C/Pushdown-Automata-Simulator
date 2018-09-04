@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
 <?import java.lang.String?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ChoiceBox?>
@@ -14,7 +17,7 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane fx:id="pane" prefHeight="690.0" prefWidth="950.0" stylesheets="@application.css" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.sceneAutomataController">
+<AnchorPane fx:id="pane" prefHeight="690.0" prefWidth="950.0" stylesheets="@application.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.sceneAutomataController">
    <children>
       <TabPane fx:id="mainTab" prefHeight="690.0" prefWidth="950.0" tabClosingPolicy="UNAVAILABLE">
         <tabs>
@@ -108,12 +111,8 @@
                         <ChoiceBox fx:id="inputPilaFutura" layoutX="419.0" layoutY="115.0" prefHeight="25.0" prefWidth="82.0" />
                         <ChoiceBox fx:id="inputRuleEdit" layoutX="14.0" layoutY="433.0" prefHeight="25.0" prefWidth="371.0" />
                         <Label fx:id="editDeleteRuleLabel" layoutX="134.0" layoutY="391.0" text="EDIT OR DELETE RULE" />
-                        <ScrollPane layoutX="460.0" layoutY="190.0" prefHeight="450.0" prefWidth="300.0">
-                          <content>
-                            <AnchorPane fx:id="rulesShow" minHeight="0.0" minWidth="0.0" prefHeight="450.0" prefWidth="300.0" />
-                          </content>
-                        </ScrollPane>
                         <Label layoutX="574.0" layoutY="158.0" text="RULES IN USE" />
+                        <ListView fx:id="rulesInUseShow" layoutX="460.0" layoutY="190.0" prefHeight="450.0" prefWidth="300.0" styleClass="slider" />
                         <Label layoutX="848.0" layoutY="158.0" text="STACK" />
                         <MenuBar fx:id="topMenu" layoutX="6.0" styleClass="context-menu">
                           <menus>
