@@ -297,6 +297,7 @@ public class sceneAutomataController {
 		try {
 			this.automata = this.fm.getAutomata(filename);
 			this.projectName.setText(filename.toUpperCase());
+                        this.rulesInUseShow.getItems().clear();
                         this.loadResources(this.automata);
 		} catch (FileNotFoundException ex) {
 			Alert errorAlert = new Alert(AlertType.ERROR);
@@ -306,6 +307,19 @@ public class sceneAutomataController {
 		}
 
 	}
+        
+        @FXML 
+        public void createNewFile() {
+                this.automata = new Automata();
+                this.inputActualState.getItems().clear();
+		this.inputCE.getItems().clear();
+		this.inputPilaActual.getItems().clear();
+		this.inputEstadoFuturo.getItems().clear();
+		this.inputPilaFutura.getItems().clear();
+                this.rulesInUseShow.getItems().clear();
+                this.inputString.setText("");
+                this.mainTab.getSelectionModel().selectFirst();
+        }
 
 	@FXML
 	public void saveFile() {
@@ -461,7 +475,7 @@ public class sceneAutomataController {
                         Simulate simulador = new Simulate(this.automata);
                         Stack<String> stack = new Stack<String>();
                         stack.push("Z");
-                        boolean possible = simulador.testWord(this.inputString.getText(),this.automata.getQ0(),stack);
+                        boolean possible = simulador.testWord(this.inputString.getText().concat("l"),this.automata.getQ0(),stack);
                         System.out.println(possible);
                         if(possible) {
                              this.solution = simulador.getSolution();
