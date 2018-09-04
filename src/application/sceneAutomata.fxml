@@ -140,8 +140,7 @@
                               <String fx:value="action-btn" />
                            </styleClass></Button>
                         <Label fx:id="initStack" layoutX="860.0" layoutY="586.0" styleClass="mainLabel" text="Z0" />
-                        <Label layoutX="553.0" layoutY="76.0" text="CURRENT INPUT:" />
-                        <Label fx:id="currentWord" layoutX="682.0" layoutY="71.0" styleClass="mainLabel" text="A" />
+                        <Label fx:id="labelCurrentInput" layoutX="553.0" layoutY="76.0" text="CURRENT INPUT:" />
                         <Label fx:id="projectName" layoutX="539.0" layoutY="22.0" styleClass="mainLabel" text="FileName" />
                      </children>
                   </AnchorPane>

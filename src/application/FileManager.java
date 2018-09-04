@@ -25,7 +25,7 @@ public class FileManager {
         }
         
         public Automata getAutomata(String fileName) throws FileNotFoundException {
-            FileReader reader = new FileReader("savedData/" + fileName + ".json");
+            FileReader reader = new FileReader("savedData/" + fileName);
             Automata m = this.jsonParser.fromJson(reader, Automata.class);
             return m;
         }
