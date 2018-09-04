@@ -461,10 +461,29 @@ public class sceneAutomataController {
                         Simulate simulador = new Simulate(this.automata);
                         Stack<String> stack = new Stack<String>();
                         stack.push("Z");
-                        simulador.testWord(this.inputString.getText(),this.automata.getQ0(),stack);
-                        this.solution = simulador.getSolution();
-                        this.animate();
-
+                        boolean possible = simulador.testWord(this.inputString.getText(),this.automata.getQ0(),stack);
+                        System.out.println(possible);
+                        if(possible) {
+                             this.solution = simulador.getSolution();
+                             this.animate();
+                        } else {
+                            Alert alert = new Alert(AlertType.ERROR);
+                            alert.setTitle("ERROR!");
+                            alert.setHeaderText("NO SE ENCONTRO SOLUCION");
+                            alert.setContentText("La cadena de entrada no pertenece al lenguaje");
+                            alert.showAndWait();
+                            this.btnAddRule.setDisable(false);
+                            this.inputActualState.setDisable(false);
+                            this.inputCE.setDisable(false);
+                            this.inputPilaActual.setDisable(false);
+                            this.inputEstadoFuturo.setDisable(false);
+                            this.inputPilaFutura.setDisable(false);
+                            this.topMenu.setDisable(false);
+                            this.formalDefinitionTab.setDisable(false);
+                            this.inputString.setDisable(false);
+                            this.btnStart.getStyleClass().set(1, "success");
+                            this.btnStart.setText("Start");
+                        }
 		} else {
 			this.btnAddRule.setDisable(false);
 			this.inputActualState.setDisable(false);
