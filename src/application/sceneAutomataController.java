@@ -294,7 +294,7 @@ public class sceneAutomataController {
 	@FXML
 	public void verifyChoiceBox() 
 	{
-		if( (inputActualState.getValue().isEmpty()) == false && (inputCE.getValue().isEmpty()) == false && (inputPilaActual.getValue().isEmpty()) == false && (inputEstadoFuturo.getValue().isEmpty()) == false && (inputPilaFutura.getValue().isEmpty()) == false)
+		if( (inputActualState.getValue() != null) && (inputCE.getValue() != null) && (inputPilaActual.getValue() != null) && (inputEstadoFuturo.getValue() != null) && (inputPilaFutura.getValue() != null))
 		{
 			btnAddRule.setDisable(false);
 		}
@@ -308,8 +308,6 @@ public class sceneAutomataController {
 		rule.setPilaActual(this.inputPilaActual.getSelectionModel().getSelectedItem().toString());
 		rule.setFutureState(this.inputEstadoFuturo.getSelectionModel().getSelectedItem().toString());
 		rule.setPilaFutura(this.inputPilaFutura.getSelectionModel().getSelectedItem().toString());
-
-		
 
 		if(this.btnAddRule.getText().equals("Edit")) {
 			int index = this.inputRuleEdit.getSelectionModel().getSelectedIndex();
@@ -376,6 +374,7 @@ public class sceneAutomataController {
 			this.inputString.setDisable(true);
 			this.btnStart.getStyleClass().set(1, "danger");
 			this.btnStart.setText("Stop");
+			showRulesUsed();
 
 		} else {
 			this.btnAddRule.setDisable(false);
@@ -419,7 +418,6 @@ public class sceneAutomataController {
 	{
 		for(int i = 0; i < sim.getSolution().size(); i++)
 		{
-
 			rulesInUseShow.getSelectionModel().select(sim.getSolution().get(i));
 
 			try 

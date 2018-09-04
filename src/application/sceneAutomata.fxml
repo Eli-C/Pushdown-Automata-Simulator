@@ -104,11 +104,11 @@
                            </styleClass></Button>
 
                         <Label layoutX="216.0" layoutY="76.0" text="ADD RULES" />
-                        <ChoiceBox fx:id="inputActualState" layoutX="12.0" layoutY="115.0" prefHeight="25.0" prefWidth="96.0" />
-                        <ChoiceBox fx:id="inputCE" layoutX="123.0" layoutY="115.0" prefHeight="25.0" prefWidth="64.0" />
-                        <ChoiceBox fx:id="inputEstadoFuturo" layoutX="304.0" layoutY="116.0" prefHeight="25.0" prefWidth="95.0" />
-                        <ChoiceBox fx:id="inputPilaActual" layoutX="206.0" layoutY="115.0" prefHeight="25.0" prefWidth="81.0" />
-                        <ChoiceBox fx:id="inputPilaFutura" layoutX="419.0" layoutY="115.0" prefHeight="25.0" prefWidth="82.0" />
+                        <ChoiceBox fx:id="inputActualState" layoutX="12.0" layoutY="115.0" prefHeight="25.0" prefWidth="96.0" onMouseClicked="#verifyChoiceBox"/>
+                        <ChoiceBox fx:id="inputCE" layoutX="123.0" layoutY="115.0" prefHeight="25.0" prefWidth="64.0" onMouseClicked="#verifyChoiceBox" />
+                        <ChoiceBox fx:id="inputEstadoFuturo" layoutX="304.0" layoutY="116.0" prefHeight="25.0" prefWidth="95.0" onMouseClicked="#verifyChoiceBox" />
+                        <ChoiceBox fx:id="inputPilaActual" layoutX="206.0" layoutY="115.0" prefHeight="25.0" prefWidth="81.0" onMouseClicked="#verifyChoiceBox" />
+                        <ChoiceBox fx:id="inputPilaFutura" layoutX="419.0" layoutY="115.0" prefHeight="25.0" prefWidth="82.0" onMouseClicked="#verifyChoiceBox" />
                         <ChoiceBox fx:id="inputRuleEdit" layoutX="14.0" layoutY="433.0" prefHeight="25.0" prefWidth="371.0" />
                         <Label fx:id="editDeleteRuleLabel" layoutX="134.0" layoutY="391.0" text="EDIT OR DELETE RULE" />
                         <Label layoutX="574.0" layoutY="158.0" text="RULES IN USE" />
