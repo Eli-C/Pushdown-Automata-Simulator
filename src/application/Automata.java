@@ -11,7 +11,7 @@ public class Automata {
 	private String Z0;
 	private ArrayList<String> F = new ArrayList<>();
 
-	private ArrayList<Rules> rulesArray;
+	private ArrayList<Rules> rulesArray = new ArrayList<>();
 
 	
 	public Automata()
