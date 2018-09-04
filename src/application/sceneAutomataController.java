@@ -20,6 +20,7 @@ import javafx.animation.PathTransition;
 import javafx.animation.Timeline;
 import javafx.animation.TranslateTransition;
 import javafx.application.Platform;
+import javafx.beans.value.ObservableValue;
 
 
 import javafx.fxml.FXML;
@@ -170,7 +171,6 @@ public class sceneAutomataController {
 
 
 	Automata automata = new Automata();
-	Simulate sim = new Simulate(automata);
 
 	ArrayList<String> Q = new ArrayList<>();
 	ToggleGroup toggleGroup = new ToggleGroup();
@@ -208,10 +208,53 @@ public class sceneAutomataController {
 		this.inputPilaActual.setTooltip(new Tooltip("Pila Actual"));
 		this.inputEstadoFuturo.setTooltip(new Tooltip("Estado Futuro"));
 		this.inputPilaFutura.setTooltip(new Tooltip("Pila Futura"));
-    this.inputPilaFutura.getItems().add("lambda");
-    this.inputPilaActual.getItems().add("Z");
-    this.inputCE.getItems().add("l");
+                this.inputPilaFutura.getItems().add("lambda");
+                this.inputPilaActual.getItems().add("Z");
+                this.inputCE.getItems().add("l");
 		this.btnAddRule.setDisable(true);
+                
+                
+                this.inputActualState.getSelectionModel()
+                .selectedItemProperty()
+                .addListener( (ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
+                    if( (inputActualState.getValue() != null) && (inputCE.getValue() != null) && (inputPilaActual.getValue() != null) && (inputEstadoFuturo.getValue() != null) && (inputPilaFutura.getValue() != null))
+                    {
+                	btnAddRule.setDisable(false);
+                    }
+                } );
+                this.inputCE.getSelectionModel()
+                .selectedItemProperty()
+                .addListener( (ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
+                    if( (inputActualState.getValue() != null) && (inputCE.getValue() != null) && (inputPilaActual.getValue() != null) && (inputEstadoFuturo.getValue() != null) && (inputPilaFutura.getValue() != null))
+                    {
+                	btnAddRule.setDisable(false);
+                    }
+                } );
+                this.inputPilaActual.getSelectionModel()
+                .selectedItemProperty()
+                .addListener( (ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
+                    if( (inputActualState.getValue() != null) && (inputCE.getValue() != null) && (inputPilaActual.getValue() != null) && (inputEstadoFuturo.getValue() != null) && (inputPilaFutura.getValue() != null))
+                    {
+                	btnAddRule.setDisable(false);
+                    }
+                } );
+                this.inputEstadoFuturo.getSelectionModel()
+                .selectedItemProperty()
+                .addListener( (ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
+                    if( (inputActualState.getValue() != null) && (inputCE.getValue() != null) && (inputPilaActual.getValue() != null) && (inputEstadoFuturo.getValue() != null) && (inputPilaFutura.getValue() != null))
+                    {
+                	btnAddRule.setDisable(false);
+                    }
+                } );
+                
+                this.inputPilaFutura.getSelectionModel()
+                .selectedItemProperty()
+                .addListener( (ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
+                    if( (inputActualState.getValue() != null) && (inputCE.getValue() != null) && (inputPilaActual.getValue() != null) && (inputEstadoFuturo.getValue() != null) && (inputPilaFutura.getValue() != null))
+                    {
+                	btnAddRule.setDisable(false);
+                    }
+                } );
 	}
 
 
@@ -295,6 +338,7 @@ public class sceneAutomataController {
             this.inputPilaFutura.getItems().addAll(m.getP());
             for(Rules r: this.automata.getRules()) {
                 this.inputRuleEdit.getItems().add(r.getFormatedRule());
+                this.rulesInUseShow.getItems().add(r.getFormatedRule());
             }
             
         }
@@ -302,6 +346,7 @@ public class sceneAutomataController {
 	@FXML 
 	public void reRender() {
 		this.loadRecentFiles();
+                this.rulesInUseShow.getItems().clear();
 	}
         
         private void loadRecentFiles() {
@@ -337,10 +382,7 @@ public class sceneAutomataController {
 	@FXML
 	public void verifyChoiceBox() 
 	{
-		if( (inputActualState.getValue() != null) && (inputCE.getValue() != null) && (inputPilaActual.getValue() != null) && (inputEstadoFuturo.getValue() != null) && (inputPilaFutura.getValue() != null))
-		{
-			btnAddRule.setDisable(false);
-		}
+		
 	}
 
 	@FXML
@@ -360,8 +402,6 @@ public class sceneAutomataController {
 		} else {
 			this.automata.setRules(rule);
 			inputRuleEdit.getItems().add(rule.getFormatedRule());
-
-			this.rulesInUseShow.getItems().clear();
 			this.rulesInUseShow.getItems().add(rule.getFormatedRule());
 		}
 	}
@@ -417,7 +457,13 @@ public class sceneAutomataController {
 			this.inputString.setDisable(true);
 			this.btnStart.getStyleClass().set(1, "danger");
 			this.btnStart.setText("Stop");
-			showRulesUsed();
+                        this.contador = 0;
+                        Simulate simulador = new Simulate(this.automata);
+                        Stack<String> stack = new Stack<String>();
+                        stack.push("Z");
+                        simulador.testWord(this.inputString.getText(),this.automata.getQ0(),stack);
+                        this.solution = simulador.getSolution();
+                        this.animate();
 
 		} else {
 			this.btnAddRule.setDisable(false);
@@ -433,14 +479,7 @@ public class sceneAutomataController {
 			this.btnStart.setText("Start");
 		}
                 
-                this.contador = 0;
-                
-                Simulate simulador = new Simulate(this.automata);
-                Stack<String> stack = new Stack<String>();
-                stack.push("Z");
-                simulador.testWord(this.inputString.getText(),this.automata.getQ0(),stack);
-                this.solution = simulador.getSolution();
-                this.animate();
+               
 	}
 
         
@@ -451,6 +490,7 @@ public class sceneAutomataController {
                 int indexRule = this.solution.get(0);
                 this.solution.remove(0);
                 Rules r = this.automata.getRule(indexRule);
+                rulesInUseShow.getSelectionModel().select(indexRule);
                 Label copy = new Label();
                 copy.setText(this.inputString.getText().substring(0, 1).toUpperCase());
                 copy.getStyleClass().add("mainLabel");
@@ -465,7 +505,6 @@ public class sceneAutomataController {
                             TranslateTransition transition = new TranslateTransition();
                             transition.setDuration(Duration.seconds(3));
                             transition.setNode(copy);
-                            System.out.println("Contador Apilando:" + this.contador);
                             transition.setToY(490  - this.contador);
                             transition.setToX(180);
                             transition.setOnFinished(e -> this.animate());
@@ -480,7 +519,8 @@ public class sceneAutomataController {
                             this.inputString.setText(this.inputString.getText().substring(1));
                             Alert alert = new Alert(AlertType.INFORMATION);
                             alert.setTitle("SUCCESS!");
-                            alert.setHeaderText("Simulation finished!");
+                            alert.setHeaderText("SIMULATION");
+                            alert.setContentText("The simulation of the PDA has finished");
                             Platform.runLater(alert::showAndWait);
                             this.btnAddRule.setDisable(false);
                             this.inputActualState.setDisable(false);
@@ -516,27 +556,16 @@ public class sceneAutomataController {
             
             }
         }
-
-
-
-
-	public void showRulesUsed() 
-	{
-		for(int i = 0; i < sim.getSolution().size(); i++)
-		{
-			rulesInUseShow.getSelectionModel().select(sim.getSolution().get(i));
-
-			try 
-			{
-				Thread.sleep(5000);
-			} 
-			catch (InterruptedException e) 
-			{
-				e.printStackTrace();
-			}		               
-
-		}
-	}
+        
+        @FXML 
+        public void showAbout() {
+            Alert alert = new Alert(AlertType.INFORMATION);
+                            alert.setTitle("About US!");
+                            alert.setHeaderText("Look for helps in our repo");
+                            alert.setContentText("Git Repository: https://github.com/Eli-C/Pushdown-Automata-Simulator \n Feel Free to Open Issues, or give recommendatios \n The Team: Elionor Cordova \n - Eun Kyu Choi \n - Carlos Gamboa" );
+                            
+                            Platform.runLater(alert::showAndWait);
+        }
 
 
 	@FXML
