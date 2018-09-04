@@ -30,14 +30,13 @@ public class Rules {
         
         
         public int getOperation() {
-            if(pilaFutura.length() > pilaActual.length()) {
-                return APILAR;
-            } else if (pilaFutura.equals("lambda")) {
+            if (pilaFutura.equals("lambda")) {
                 return DESAPILAR;
-            } else if (pilaActual.equals(pilaActual)) {
+            }   else if(pilaFutura.length() > pilaActual.length()) {
+                return APILAR;
+            } else {
                 return NOTHING;
             }
-            return NOTHING;
         }
         
         
