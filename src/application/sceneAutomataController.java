@@ -307,6 +307,18 @@ public class sceneAutomataController {
 
 	@FXML
 	public void EditRule() {
+                String rule = this.inputRuleEdit.getSelectionModel().getSelectedItem();
+                rule.replace("<", "");
+                rule.replace(">", "");
+                String[] pieces = rule.split(", ");
+                for (String piece : pieces) {
+                    piece.replaceAll("\\s","");
+                }
+                this.inputActualState.getSelectionModel().select(pieces[0]);
+                this.inputCE.getSelectionModel().select(pieces[1]);
+                this.inputPilaActual.getSelectionModel().select(pieces[2]);
+                this.inputEstadoFuturo.getSelectionModel().select(pieces[3]);
+                this.inputPilaActual.getSelectionModel().select(pieces[4]);
 		this.editDeleteRuleLabel.setVisible(false);
 		this.inputRuleEdit.setVisible(false);
 		this.btnDeleteRule.setVisible(false);
