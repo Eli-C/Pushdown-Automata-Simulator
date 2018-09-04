@@ -4,12 +4,12 @@ import java.util.ArrayList;
 
 public class Automata {
 	
-	private String[] Q;
-	private char[] X;
-	private char[] P;
+	private ArrayList<String> Q = new ArrayList<>();
+	private ArrayList<String> X = new ArrayList<>();
+	private ArrayList<String> P = new ArrayList<>();
 	private String q0;
 	private String Z0;
-	private String[] F;
+	private ArrayList<String> F = new ArrayList<>();
 
 	private ArrayList<Rules> rulesArray;
 
@@ -19,7 +19,7 @@ public class Automata {
 		
 	}
 	
-	public Automata(String[] Q, char[] X, char[] P, String q0, String Z0, String[] F, ArrayList<Rules> rules)
+	public Automata(ArrayList<String> Q, ArrayList<String> X, ArrayList<String> P, String q0, String Z0, ArrayList<String> F, ArrayList<Rules> rules)
 	{
 		this.Q = Q;
 		this.X = X;
@@ -27,7 +27,7 @@ public class Automata {
 		this.q0 = q0; 
 		this.Z0 = Z0;
 		this.F = F;	
-                this.rulesArray = rules;
+        this.rulesArray = rules;
 	}
         
 	public void setRules(Rules rule) {
@@ -50,27 +50,27 @@ public class Automata {
     return rulesArray.set(i, modifiedRule);
   }
 
-	public String[] getQ() 
+	public ArrayList<String> getQ() 
 	{
 		return Q;
 	}
-	public void setQ(String[] q) 
+	public void setQ(ArrayList<String> q) 
 	{
 		Q = q;
 	}
-	public char[] getX() 
+	public ArrayList<String> getX() 
 	{
 		return X;
 	}
-	public void setX(char[] x) 
+	public void setX(ArrayList<String> x) 
 	{
 		X = x;
 	}
-	public char[] getP() 
+	public ArrayList<String> getP() 
 	{
 		return P;
 	}
-	public void setP(char[] p) 
+	public void setP(ArrayList<String> p) 
 	{
 		P = p;
 	}
@@ -90,11 +90,11 @@ public class Automata {
 	{
 		Z0 = z0;
 	}
-	public String[] getF() 
+	public ArrayList<String> getF() 
 	{
 		return F;
 	}
-	public void setF(String[] f) 
+	public void setF(ArrayList<String> f) 
 	{
 		F = f;
 	}
