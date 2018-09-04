@@ -111,6 +111,9 @@ public class sceneAutomataController {
 	@FXML
 	private ListView recentFilesList;
 
+	@FXML
+	private ListView rulesInUseShow;
+
 	@FXML 
 	private Tab automataTab;
 
@@ -167,6 +170,7 @@ public class sceneAutomataController {
 
 
 	Automata automata = new Automata();
+	Simulate sim = new Simulate(automata);
 
 	ArrayList<String> Q = new ArrayList<>();
 	ToggleGroup toggleGroup = new ToggleGroup();
@@ -183,6 +187,7 @@ public class sceneAutomataController {
         int contador = 0;
 	boolean q0Exists = false;
 	boolean Z0Exists = false;
+
 
 	public sceneAutomataController()
 	{
@@ -203,9 +208,10 @@ public class sceneAutomataController {
 		this.inputPilaActual.setTooltip(new Tooltip("Pila Actual"));
 		this.inputEstadoFuturo.setTooltip(new Tooltip("Estado Futuro"));
 		this.inputPilaFutura.setTooltip(new Tooltip("Pila Futura"));
-                this.inputPilaFutura.getItems().add("lambda");
-                this.inputPilaActual.getItems().add("Z");
-                this.inputCE.getItems().add("l");
+    this.inputPilaFutura.getItems().add("lambda");
+    this.inputPilaActual.getItems().add("Z");
+    this.inputCE.getItems().add("l");
+		this.btnAddRule.setDisable(true);
 	}
 
 
@@ -232,6 +238,7 @@ public class sceneAutomataController {
 			}
 		}
 	}
+
 
 
 	//Called when openFile from menu is clicked
@@ -327,6 +334,14 @@ public class sceneAutomataController {
 		this.btnEditRule.setVisible(true);
 	}
 
+	@FXML
+	public void verifyChoiceBox() 
+	{
+		if( (inputActualState.getValue().isEmpty()) == false && (inputCE.getValue().isEmpty()) == false && (inputPilaActual.getValue().isEmpty()) == false && (inputEstadoFuturo.getValue().isEmpty()) == false && (inputPilaFutura.getValue().isEmpty()) == false)
+		{
+			btnAddRule.setDisable(false);
+		}
+	}
 
 	@FXML
 	public void addRule() {
@@ -337,6 +352,8 @@ public class sceneAutomataController {
 		rule.setFutureState(this.inputEstadoFuturo.getSelectionModel().getSelectedItem().toString());
 		rule.setPilaFutura(this.inputPilaFutura.getSelectionModel().getSelectedItem().toString());
 
+		
+
 		if(this.btnAddRule.getText().equals("Edit")) {
 			int index = this.inputRuleEdit.getSelectionModel().getSelectedIndex();
 			this.automata.editRule(index, rule);
@@ -345,23 +362,26 @@ public class sceneAutomataController {
 		} else {
 			this.automata.setRules(rule);
 			inputRuleEdit.getItems().add(rule.getFormatedRule());
+
+			this.rulesInUseShow.getItems().clear();
+			this.rulesInUseShow.getItems().add(rule.getFormatedRule());
 		}
 	}
 
 	@FXML
 	public void EditRule() {
-                String rule = this.inputRuleEdit.getSelectionModel().getSelectedItem();
-                rule.replace("<", "");
-                rule.replace(">", "");
-                String[] pieces = rule.split(", ");
-                for (String piece : pieces) {
-                    piece.replaceAll("\\s","");
-                }
-                this.inputActualState.getSelectionModel().select(pieces[0]);
-                this.inputCE.getSelectionModel().select(pieces[1]);
-                this.inputPilaActual.getSelectionModel().select(pieces[2]);
-                this.inputEstadoFuturo.getSelectionModel().select(pieces[3]);
-                this.inputPilaActual.getSelectionModel().select(pieces[4]);
+		String rule = this.inputRuleEdit.getSelectionModel().getSelectedItem();
+		rule.replace("<", "");
+		rule.replace(">", "");
+		String[] pieces = rule.split(", ");
+		for (String piece : pieces) {
+			piece.replaceAll("\\s","");
+		}
+		this.inputActualState.getSelectionModel().select(pieces[0]);
+		this.inputCE.getSelectionModel().select(pieces[1]);
+		this.inputPilaActual.getSelectionModel().select(pieces[2]);
+		this.inputEstadoFuturo.getSelectionModel().select(pieces[3]);
+		this.inputPilaActual.getSelectionModel().select(pieces[4]);
 		this.editDeleteRuleLabel.setVisible(false);
 		this.inputRuleEdit.setVisible(false);
 		this.btnDeleteRule.setVisible(false);
@@ -372,9 +392,9 @@ public class sceneAutomataController {
 
 	@FXML
 	public void DeleteRule() {
-		
+
 		int index = this.inputRuleEdit.getSelectionModel().getSelectedIndex();
-		
+
 		this.editDeleteRuleLabel.setVisible(false);
 		this.inputRuleEdit.setVisible(false);
 		this.btnDeleteRule.setVisible(false);
@@ -423,6 +443,7 @@ public class sceneAutomataController {
                 this.solution = simulador.getSolution();
                 this.animate();
 	}
+
         
         private void animate() {
             if(this.solution.size() < 1) {
@@ -497,6 +518,29 @@ public class sceneAutomataController {
             }
         }
 
+
+
+
+	public void showRulesUsed() 
+	{
+		for(int i = 0; i < sim.getSolution().size(); i++)
+		{
+
+			rulesInUseShow.getSelectionModel().select(sim.getSolution().get(i));
+
+			try 
+			{
+				Thread.sleep(5000);
+			} 
+			catch (InterruptedException e) 
+			{
+				e.printStackTrace();
+			}		               
+
+		}
+	}
+
+
 	@FXML
 	public void read_Q()
 	{
@@ -509,7 +553,7 @@ public class sceneAutomataController {
 			Q_Scene.add(inputConjuntoEstados.getText());
 			inputActualState.getItems().add(inputConjuntoEstados.getText());
 			inputEstadoFuturo.getItems().add(inputConjuntoEstados.getText());
-			
+
 			successMessageAlert();
 			inputConjuntoEstados.setText("");;
 		}
@@ -529,7 +573,7 @@ public class sceneAutomataController {
 		{
 			X_Scene.add(inputAlfabetoEntrada.getText());
 			inputCE.getItems().add(inputAlfabetoEntrada.getText());
-			
+
 			successMessageAlert();
 			inputAlfabetoEntrada.setText("");
 		}
@@ -551,8 +595,7 @@ public class sceneAutomataController {
                         P_Scene.add(inputAfabetoPila.getText().concat(inputAfabetoPila.getText()));
 			inputPilaActual.getItems().add(inputAfabetoPila.getText());
 			inputPilaFutura.getItems().add(inputAfabetoPila.getText() + "Z");
-                        inputPilaFutura.getItems().add(inputAfabetoPila.getText().concat(inputAfabetoPila.getText()));
-			
+      inputPilaFutura.getItems().add(inputAfabetoPila.getText().concat(inputAfabetoPila.getText()));
 			successMessageAlert();
 			inputAfabetoPila.setText("");
 		}
@@ -640,6 +683,15 @@ public class sceneAutomataController {
 			inputEstaosAcept.setText("");
 		}
 		automata.setF(F_Scene);
+	}
+
+
+	public void EnableAddButton()
+	{
+		if(!(inputActualState.getValue().equals("")) && !(inputCE.getValue().equals("")) && !(inputPilaActual.getValue().equals("")) && !(inputEstadoFuturo.getValue().equals("")) && !(inputPilaFutura.getValue().equals("")))
+		{
+			btnAddRule.setDisable(false);
+		}
 	}
 
 
