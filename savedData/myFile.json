@@ -1,0 +1,25 @@
+{
+  "Q": [
+    "j"
+  ],
+  "X": [
+    "k"
+  ],
+  "P": [
+    "l"
+  ],
+  "q0": "j",
+  "Z0": "z",
+  "F": [
+    "j"
+  ],
+  "rulesArray": [
+    {
+      "actualState": "j",
+      "input": "k",
+      "pilaActual": "l",
+      "futureState": "j",
+      "pilaFutura": "l"
+    }
+  ]
+}

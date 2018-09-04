@@ -25,25 +25,18 @@ public class Main extends Application {
 	public void start(Stage primaryStage) {
 		try {
 			Parent root = FXMLLoader.load(getClass().getResource("sceneAutomata.fxml"));
-			
-			primaryStage.setTitle("Automata Simulator");
-			primaryStage.setScene(new Scene(root));
-			primaryStage.show();
-			
-			/*BorderPane root = new BorderPane();
-			
-			BorderPane root = new BorderPane();
-			
-			Scene scene = new Scene(root,400,400);
-			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 
+			primaryStage.setTitle("Automata Simulator");
+			Scene scene = new Scene(root);
+			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 			primaryStage.setScene(scene);
-			primaryStage.show();*/
+			primaryStage.show();
+
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public static void main(String[] args) {
                 String[] Q = new String[] {"Leer","Comp"};
                 char[] X = new char[] {'a','b'};
@@ -64,5 +57,7 @@ public class Main extends Application {
                 boolean result = s.testWord("aabbl", m.getQ0(), stack);
                 System.out.println("The result for word test is " + result);
                 launch(args);
+
+		launch(args);
 	}
 }

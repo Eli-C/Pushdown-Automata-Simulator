@@ -25,8 +25,10 @@ public class Simulate {
 		String pilaActual = copyStack.pop();
 		System.out.println("pilaActual = " + pilaActual);
 		char word = Character.valueOf(input.charAt(0));
+
 		System.out.println("word to be inserted = " + word);
 		Stream<Rules> possibleRulesStream = rules.stream().filter(rule -> ((rule.getInput() == word) && (rule.getActualState().equals(state)) && (rule.getPilaActual().equals(pilaActual))));
+
 		List<Rules> possibleRules = possibleRulesStream.collect(Collectors.toList());
 		System.out.println("Possible rules are: " + possibleRules.toString());
 
