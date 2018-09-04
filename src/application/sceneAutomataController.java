@@ -2,6 +2,7 @@ package application;
 
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -18,14 +19,20 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckMenuItem;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
+import javafx.scene.control.MenuItem;
+import javafx.scene.control.RadioButton;
+import javafx.scene.control.RadioMenuItem;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextInputDialog;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.Tooltip;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
@@ -51,7 +58,10 @@ public class sceneAutomataController {
             
             
             @FXML
-            private MenuBar topMenu;    
+            private MenuBar topMenu;   
+            
+            @FXML
+            private Menu menuOpenFile;
 
 	    @FXML
 	    private ChoiceBox<?> inputActualState;
@@ -79,6 +89,9 @@ public class sceneAutomataController {
             
             @FXML
             private Label editDeleteRuleLabel;
+            
+            @FXML
+            private Label projectName;
 
 	    @FXML
 	    private TextField inputEstadoInicial;
@@ -146,6 +159,8 @@ public class sceneAutomataController {
 	    
 	    Automata automata = new Automata();
             ArrayList<String> Q = new ArrayList<>();
+            ToggleGroup toggleGroup = new ToggleGroup();
+            FileManager fm = new FileManager();
 	    
 	    public sceneAutomataController()
 	    {
@@ -168,6 +183,8 @@ public class sceneAutomataController {
                 this.inputPilaFutura.setTooltip(new Tooltip("Pila Futura"));
 	    }
             
+            //Called when a file is double clicked from the main menu
+            
             @FXML
             public void getFile(MouseEvent event) {
                 if(event.getClickCount() == 2) {
@@ -175,15 +192,44 @@ public class sceneAutomataController {
                     Alert infoAlert = new Alert(AlertType.INFORMATION);
                     infoAlert.setHeaderText("Loading your file");
                     infoAlert.setContentText("Opening your saved file. Click on Ok to continue...");
-                    infoAlert.showAndWait();	
+                    infoAlert.showAndWait();
+                    this.projectName.setText(fileSelected.toUpperCase());
                     this.mainTab.getSelectionModel().selectNext();
+                    try {
+                        this.automata = this.fm.getAutomata(fileSelected);
+                    } catch (FileNotFoundException ex) {
+                        Alert errorAlert = new Alert(AlertType.ERROR);
+                        errorAlert.setHeaderText("Oops! There was a problem");
+                        errorAlert.setContentText("Error while retrieving the file.");
+                        errorAlert.showAndWait();
+                    }
+                }
+            }
+            
+            //Called when openFile from menu is clicked
+            
+            @FXML
+            public void loadFile() {
+                RadioMenuItem selectedRadioButton = (RadioMenuItem) this.toggleGroup.getSelectedToggle();
+                String filename = selectedRadioButton.getText();
+                Alert infoAlert = new Alert(AlertType.INFORMATION);
+                infoAlert.setHeaderText("Loading your file");
+                infoAlert.setContentText("Opening your saved file. Click on Ok to continue...");
+                infoAlert.showAndWait();
+                try {
+                    this.automata = this.fm.getAutomata(filename);
+                    this.projectName.setText(filename.toUpperCase());
+                } catch (FileNotFoundException ex) {
+                        Alert errorAlert = new Alert(AlertType.ERROR);
+                        errorAlert.setHeaderText("Oops! There was a problem");
+                        errorAlert.setContentText("Error while retrieving the file.");
+                        errorAlert.showAndWait();
                 }
                 
             }
             
             @FXML
             public void saveFile() {
-                FileManager fm = new FileManager();
                 TextInputDialog dialog = new TextInputDialog("myFile");
                 dialog.setTitle("Filename");
                 dialog.setHeaderText("To save your file we need a name.");
@@ -191,7 +237,10 @@ public class sceneAutomataController {
                 Optional<String> result = dialog.showAndWait();
                 result.ifPresent(name -> {
                     try {
-                        fm.saveAutomata(name, automata);
+                        this.fm.saveAutomata(name, automata);
+                        RadioMenuItem r1 = new RadioMenuItem(name + ".json");
+                        r1.setToggleGroup(this.toggleGroup);
+                        this.menuOpenFile.getItems().add(r1);
                     } catch (IOException ex) {
                         Alert errorAlert = new Alert(AlertType.ERROR);
                         errorAlert.setHeaderText("Error while saving file");
@@ -303,39 +352,21 @@ public class sceneAutomataController {
                     this.inputString.setDisable(false);
                     this.btnStart.getStyleClass().set(1, "success");
                     this.btnStart.setText("Start");
-                }
-                
-                
-               
-//                PathElement[] path2 = {
-//                  new MoveTo(this.currentWord.getLayoutX() + 20,this.currentWord.getLayoutY()),
-//                  new ArcTo(100,100,0,this.currentWord.getLayoutX(),this.currentWord.getLayoutY(),false,false),
-//                  new LineTo(this.initStack.getLayoutX(),this.initStack.getLayoutY())
-//                };
-//                Path path = new Path();
-//                path.getElements().add(new MoveTo(10,10));
-//                path.getElements().add(new CubicCurveTo(380, 0, 380, 120, 200, 120));
-//                path.getElements().add(new CubicCurveTo(0, 120, 0, 240, 380, 240));
-//                path.getElements().add(new MoveTo(40,300));
-//                path.getElements().add(new CubicCurveTo(380, 0, 380, 380, 200, 120));
-//                path.getElements().add(new CubicCurveTo(0, 120, 0, 380, 380, 240));
-//                PathTransition pathTransition = new PathTransition();
-//                pathTransition.setDuration(Duration.millis(9000));
-//                pathTransition.setPath(path);
-//                pathTransition.setNode(this.currentWord);
-//                pathTransition.setOrientation(PathTransition.OrientationType.ORTHOGONAL_TO_TANGENT);
-//                pathTransition.setCycleCount(Timeline.INDEFINITE);
-//                pathTransition.setAutoReverse(true);
-//                pathTransition.play();
-                    
+                }                    
             }
             
             
             private void loadRecentFiles() {
                 this.recentFilesList.getItems().clear();
+                this.menuOpenFile.getItems().clear();
                 try {
                     Files.newDirectoryStream(Paths.get("./savedData"),path -> path.toString().endsWith(".json"))
-                            .forEach(filePath -> this.recentFilesList.getItems().add(filePath.getFileName()));
+                            .forEach(filePath -> { 
+                                    RadioMenuItem r1 = new RadioMenuItem(filePath.getFileName().toString());
+                                    r1.setToggleGroup(this.toggleGroup);
+                                    this.recentFilesList.getItems().add(filePath.getFileName());
+                                    this.menuOpenFile.getItems().add(r1);
+                                    });
                 } catch (IOException ex) {
                     Alert errorAlert = new Alert(AlertType.ERROR);
                     errorAlert.setHeaderText("No files found");
