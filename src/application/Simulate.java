@@ -1,6 +1,7 @@
 package application;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Stack;
 import java.util.stream.Collectors;
@@ -44,7 +45,9 @@ public class Simulate {
 			}
 			
 			if(testWord(input.substring(1), possibleRules.get(i).getFutureState(), stack)){
+				//adding index of rules used 
 				solution.add(rules.indexOf(possibleRules.get(i)));
+				Collections.reverse(solution);
 				System.out.println(solution.toString());
 				return true;
 			}
