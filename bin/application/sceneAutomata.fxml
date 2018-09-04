@@ -14,7 +14,9 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 
+
 <AnchorPane fx:id="pane" prefHeight="690.0" prefWidth="950.0" stylesheets="@application.css" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.sceneAutomataController">
+
    <children>
       <TabPane fx:id="mainTab" prefHeight="690.0" prefWidth="950.0" tabClosingPolicy="UNAVAILABLE">
         <tabs>

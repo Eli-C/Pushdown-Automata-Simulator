@@ -38,6 +38,25 @@ public class Main extends Application {
 	}
 
 	public static void main(String[] args) {
+                String[] Q = new String[] {"Leer","Comp"};
+                char[] X = new char[] {'a','b'};
+                char[] P  = new char[] {'a','b'};
+                String Q0 = "Leer";
+                String Z0 = "Z";
+                String F[] = new String[] {};
+                ArrayList<Rules> rules = new ArrayList<Rules>();
+                rules.add(new Rules("Leer",'a',"Z","Leer","AZ"));
+                rules.add(new Rules("Leer",'a',"A","Leer","AA"));
+                rules.add(new Rules("Leer",'b',"A","Comp","lambda"));
+                rules.add(new Rules("Comp",'b',"A","Comp","lambda"));
+                rules.add(new Rules("Comp",'l',"Z","Aceptar","lambda"));
+                Stack<String> stack = new Stack<String>();
+                stack.push("Z");
+                Automata m = new Automata(Q,X,P,Q0,Z0,F,rules);
+                Simulate s = new Simulate(m);
+                boolean result = s.testWord("aabbl", m.getQ0(), stack);
+                System.out.println("The result for word test is " + result);
+                launch(args);
 
 		launch(args);
 	}
