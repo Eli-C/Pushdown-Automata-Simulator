@@ -19,7 +19,7 @@ public class Simulate {
 		}
 		String pilaActual = stack.pop();
 		char word = Character.valueOf(input.charAt(0));
-		Stream<Rules> possibleRulesStream = rules.stream().filter(rule -> ((rule.getInput() == word) && (rule.getActualState() == state) && (rule.getPilaActual() == pilaActual)));
+		Stream<Rules> possibleRulesStream = rules.stream().filter(rule -> ((rule.getInput().charAt(0) == word) && (rule.getActualState() == state) && (rule.getPilaActual() == pilaActual)));
 		List<Rules> possibleRules = possibleRulesStream.collect(Collectors.toList());
 
 		for(int i=0; i<possibleRules.size(); i++) {
