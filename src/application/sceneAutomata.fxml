@@ -29,16 +29,16 @@
                         <TextField fx:id="inputEstaosAcept" layoutX="109.0" layoutY="512.0" promptText="CONJUNTO DE ESTADOS ACEPTADOS" />
                         <Label layoutX="91.0" layoutY="222.0" text="X: " />
                         <Label layoutX="91.0" layoutY="293.0" text="P: " />
-                        <Label layoutX="84.0" layoutY="363.0" text="q0; " />
+                        <Label layoutX="84.0" layoutY="363.0" text="q0: " />
                         <Label layoutX="88.0" layoutY="441.0" text="Z0: " />
                         <Label layoutX="116.0" layoutY="486.0" text="CONJUNTO DE ESTADOS ACEPTADOS" />
                         <Label layoutX="88.0" layoutY="516.0" text="F: " />
                         <Button fx:id="btnConjEstados" layoutX="326.0" layoutY="145.0" mnemonicParsing="false" onAction="#read_Q" text="Add" />
-                        <Button fx:id="btnAlfabetoEntrada" layoutX="326.0" layoutY="218.0" mnemonicParsing="false" text="Add" />
-                        <Button fx:id="inputAlfabetoPila" layoutX="326.0" layoutY="289.0" mnemonicParsing="false" text="Add" />
-                        <Button fx:id="btnEstadoInicial" layoutX="326.0" layoutY="359.0" mnemonicParsing="false" text="Add" />
-                        <Button fx:id="btnSimboloIniPila" layoutX="326.0" layoutY="437.0" mnemonicParsing="false" text="Add" />
-                        <Button fx:id="btnEstadosAcept" layoutX="326.0" layoutY="512.0" mnemonicParsing="false" text="Add" />
+                        <Button fx:id="btnAlfabetoEntrada" layoutX="326.0" layoutY="218.0" mnemonicParsing="false" onAction="#read_X" text="Add" />
+                        <Button fx:id="inputAlfabetoPila" layoutX="326.0" layoutY="289.0" mnemonicParsing="false" onAction="#read_P" text="Add" />
+                        <Button fx:id="btnEstadoInicial" layoutX="326.0" layoutY="359.0" mnemonicParsing="false" onAction="#read_q0" text="Add" />
+                        <Button fx:id="btnSimboloIniPila" layoutX="326.0" layoutY="437.0" mnemonicParsing="false" onAction="#read_Z0" text="Add" />
+                        <Button fx:id="btnEstadosAcept" layoutX="326.0" layoutY="512.0" mnemonicParsing="false" onAction="#read_F" text="Add" />
                         <Label layoutX="660.0" layoutY="63.0" text="RECENT FILES" />
                         <ScrollPane layoutX="496.0" layoutY="112.0" prefHeight="500.0" prefWidth="400.0">
                           <content>
@@ -53,7 +53,7 @@
             <content>
               <AnchorPane fx:id="inputCadenaEntrada" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                      <children>
-                        <Button fx:id="btnAddRule" layoutX="224.0" layoutY="154.0" mnemonicParsing="false" text="Add" />
+                        <Button fx:id="btnAddRule" layoutX="224.0" layoutY="154.0" mnemonicParsing="false" onAction="#populateRulesToEdit" text="Add" />
                         <Button fx:id="bntDeleteRule" layoutX="230.0" layoutY="484.0" mnemonicParsing="false" text="Delete" />
                         <Button layoutX="132.0" layoutY="484.0" mnemonicParsing="false" text="Edit" />
                         <Label layoutX="216.0" layoutY="76.0" text="ADD RULES" />

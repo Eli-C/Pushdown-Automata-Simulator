@@ -45,7 +45,7 @@ public class Main extends Application {
 	}
 	
 	public static void main(String[] args) {
-                String[] Q = new String[] {"Leer","Comp"};
+                /*String[] Q = new String[] {"Leer","Comp"};
                 char[] X = new char[] {'a','b','c'};
                 char[] P  = new char[] {'a','b','c'};
                 String Q0 = "Leer";
@@ -62,7 +62,7 @@ public class Main extends Application {
                 Automata m = new Automata(Q,X,P,Q0,Z0,F,rules);
                 Simulate s = new Simulate(m);
                 boolean result = s.testWord("aca", m.getQ0(),stack);
-                System.out.println("The word tested is " + result);
+                System.out.println("The word tested is " + result);*/
                 launch(args);
 	}
 }
