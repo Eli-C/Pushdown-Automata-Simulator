@@ -410,6 +410,7 @@ public class sceneAutomataController {
 			inputEstadoFuturo.getItems().add(inputConjuntoEstados.getText());
 			
 			successMessageAlert();
+			inputConjuntoEstados.setText("");;
 		}
 
 		automata.setQ(Q_Scene);
@@ -427,9 +428,11 @@ public class sceneAutomataController {
 		{
 			X_Scene.add(inputAlfabetoEntrada.getText());
 			inputCE.getItems().add(inputAlfabetoEntrada.getText());
+			
+			successMessageAlert();
+			inputAlfabetoEntrada.setText("");
 		}
 		automata.setX(X_Scene);
-		successMessageAlert();
 	}
 
 
@@ -445,9 +448,11 @@ public class sceneAutomataController {
 			P_Scene.add(inputAfabetoPila.getText());
 			inputPilaActual.getItems().add(inputAfabetoPila.getText());
 			inputPilaFutura.getItems().add(inputAfabetoPila.getText());
+			
+			successMessageAlert();
+			inputAfabetoPila.setText("");
 		}
 		automata.setP(P_Scene);
-		successMessageAlert();
 	}
 
 
@@ -464,8 +469,9 @@ public class sceneAutomataController {
 			{
 				q0_Scene = inputEstadoInicial.getText();
 				automata.setQ0(q0_Scene);
-				successMessageAlert();
 				q0Exists = true;
+				successMessageAlert();
+				inputEstadoInicial.setText(q0_Scene);
 			}
 			else 
 			{
@@ -496,8 +502,9 @@ public class sceneAutomataController {
 			{
 				Z0_Scene = inputSimboloIniPila.getText();
 				automata.setZ0(Z0_Scene);
-				successMessageAlert();
 				Z0Exists = true;
+				successMessageAlert();
+				inputSimboloIniPila.setText(Z0_Scene);
 			}
 			else 
 			{
@@ -525,9 +532,10 @@ public class sceneAutomataController {
 		else 
 		{
 			F_Scene.add(inputEstaosAcept.getText());
+			successMessageAlert();
+			inputEstaosAcept.setText("");
 		}
 		automata.setF(F_Scene);
-		successMessageAlert();
 	}
 
 
