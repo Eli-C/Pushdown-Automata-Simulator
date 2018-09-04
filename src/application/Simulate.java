@@ -49,11 +49,16 @@ public class Simulate {
 			if(testWord(input.substring(1), possibleRules.get(i).getFutureState(), stack)){
 				//adding index of rules used 
 				solution.add(rules.indexOf(possibleRules.get(i)));
-				Collections.reverse(solution);
+				//Collections.reverse(solution);
 				System.out.println(solution.toString());
 				return true;
 			}
 		}
 		return false;
 	}
+        
+        public ArrayList<Integer> getSolution() {
+            Collections.reverse(this.solution);
+            return this.solution;
+        }
 }

@@ -289,7 +289,7 @@ public class sceneAutomataController {
 	public void addRule() {
 		Rules rule = new Rules();
 		rule.setActualState(this.inputActualState.getSelectionModel().getSelectedItem().toString());
-		rule.setInput(this.inputCE.getSelectionModel().getSelectedItem().toString());
+		rule.setInput(this.inputCE.getSelectionModel().getSelectedItem().toString().charAt(0));
 		rule.setPilaActual(this.inputPilaActual.getSelectionModel().getSelectedItem().toString());
 		rule.setFutureState(this.inputEstadoFuturo.getSelectionModel().getSelectedItem().toString());
 		rule.setPilaFutura(this.inputPilaFutura.getSelectionModel().getSelectedItem().toString());

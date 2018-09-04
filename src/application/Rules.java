@@ -4,7 +4,7 @@ public class Rules {
 	
 	
 	private String actualState;
-	private String input; 
+	private char input; 
 	private String pilaActual;
 	private String futureState;
 	private String pilaFutura;
@@ -36,11 +36,11 @@ public class Rules {
 	{
 		this.actualState = actualState;
 	}
-	public String getInput() 
+	public char getInput() 
 	{
 		return input;
 	}
-	public void setInput(String input) 
+	public void setInput(char input) 
 	{
 		this.input = input;
 	}
